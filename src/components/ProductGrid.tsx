@@ -9,7 +9,7 @@ export default function ProductGrid() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <section className="max-w-7xl mx-auto px-6 pb-20">
+    <section id="catalog" className="max-w-7xl mx-auto px-6 pb-20">
       <div className="flex items-end justify-between mb-8">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-gray-400 mb-2">
