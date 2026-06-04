@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import SupportModal from "./SupportModal";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AddToCartButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -12,12 +14,10 @@ export default function AddToCartButton() {
         onClick={() => setIsModalOpen(true)}
         className="mt-4 w-full rounded-full bg-black text-white py-3 text-sm"
       >
-        Додати в кошик
+        {t.product.addToCart}
       </button>
 
-      {isModalOpen && (
-        <SupportModal onClose={() => setIsModalOpen(false)} />
-      )}
+      {isModalOpen && <SupportModal onClose={() => setIsModalOpen(false)} />}
     </>
   );
 }
