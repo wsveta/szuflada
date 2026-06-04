@@ -31,7 +31,7 @@ export default function Hero() {
 
         <div className="aspect-[4/5] rounded-3xl bg-gray-100 flex items-center justify-center">
           <span className="text-gray-400">Тут буде фото товарів</span>
-        </div>
+section        </div>
       </div>
     </section>
   );

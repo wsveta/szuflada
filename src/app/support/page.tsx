@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 export default function SupportPage() {
   return (
@@ -54,7 +55,8 @@ export default function SupportPage() {
             Підтримати через 4fund
           </a>
         </section>
-      </main>
+          </main>
+          <Footer />
     </>
   );
 }
