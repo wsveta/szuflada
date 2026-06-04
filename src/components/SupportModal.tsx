@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type SupportModalProps = {
   onClose: () => void;
 };
@@ -20,12 +22,12 @@ export default function SupportModal({ onClose }: SupportModalProps) {
         </p>
 
         <div className="mt-6 flex flex-col gap-3">
-          <a
-            href="#"
-            className="text-center rounded-full bg-black text-white py-3"
-          >
-            Підтримати запуск
-          </a>
+          <Link
+  href="/support"
+  className="text-center rounded-full bg-black text-white py-3"
+>
+  Підтримати запуск
+</Link>
 
           <button
   onClick={onClose}

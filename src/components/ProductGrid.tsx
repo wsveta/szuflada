@@ -1,13 +1,7 @@
-"use client";
-
-import { useState } from "react";
 import ProductCard from "./ProductCard";
-import SupportModal from "./SupportModal";
 import { products } from "@/data/products";
 
 export default function ProductGrid() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   return (
     <section id="catalog" className="max-w-7xl mx-auto px-6 pb-20">
       <div className="flex items-end justify-between mb-8">
@@ -26,17 +20,9 @@ export default function ProductGrid() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={() => setIsModalOpen(true)}
-          />
+          <ProductCard key={product.id} product={product} />
         ))}
       </div>
-
-      {isModalOpen && (
-        <SupportModal onClose={() => setIsModalOpen(false)} />
-      )}
     </section>
   );
 }
