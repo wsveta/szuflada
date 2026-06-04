@@ -27,7 +27,7 @@ export default function Hero() {
               {t.hero.catalogButton}
             </a>
 
-            <a href="#about" className="px-6 py-3 border border-gray-300 rounded-full">
+            <a href="#about" className="px-6 py-3 border border-gray-300 text-gray-500 rounded-full">
               {t.hero.aboutButton}
             </a>
           </div>

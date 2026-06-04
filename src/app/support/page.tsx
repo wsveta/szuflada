@@ -30,7 +30,7 @@ export default function SupportPage() {
             {t.support.description}
           </p>
 
-          <div className="mt-10 space-y-4">
+          <div className="mt-10 space-y-4 text-gray-500">
             {t.support.steps.map((step) => (
               <p key={step}>{step}</p>
             ))}
@@ -48,12 +48,12 @@ export default function SupportPage() {
             </ul>
           </div>
 
-          <a
-            href="#"
+          <Link
+            href="https://4fund.com/449vkn"
             className="mt-8 inline-flex rounded-full bg-black text-white px-6 py-3"
           >
             {t.support.button}
-          </a>
+          </Link>
         </section>
       </main>
 
