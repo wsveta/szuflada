@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Hero() {
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
@@ -19,19 +21,32 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex gap-4">
-            <button className="px-6 py-3 bg-black text-white rounded-full">
+            <a
+              href="#catalog"
+              className="px-6 py-3 bg-black text-white rounded-full"
+            >
               Переглянути каталог
-            </button>
+            </a>
 
-            <button className="px-6 py-3 border border-gray-300 text-black rounded-full">
+            <a
+              href="#about"
+              className="px-6 py-3 border border-gray-300 rounded-full"
+            >
               Про проєкт
-            </button>
+            </a>
           </div>
         </div>
 
-        <div className="aspect-[4/5] rounded-3xl bg-gray-100 flex items-center justify-center">
-          <span className="text-gray-400">Тут буде фото товарів</span>
-section        </div>
+        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl">
+          <Image
+            src="/hero/hero-image.jpeg"
+            alt="Szuflada hero image"
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-cover"
+          />
+        </div>
       </div>
     </section>
   );
