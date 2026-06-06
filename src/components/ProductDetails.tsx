@@ -9,7 +9,7 @@ type ProductDetailsProps = {
 };
 
 export default function ProductDetails({ product }: ProductDetailsProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <div>
@@ -25,8 +25,20 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
         {product.description[language]}
       </p>
 
+      <p
+        className={`mt-4 text-sm ${
+          product.isAvailable
+            ? "text-green-700 dark:text-green-400"
+            : "text-red-600 dark:text-red-400"
+        }`}
+      >
+        {product.isAvailable
+          ? `${t.product.stockCount}: ${product.stock}`
+          : t.product.outOfStock}
+      </p>
+
       <div className="mt-6 w-full sm:max-w-xs">
-        <AddToCartButton />
+        <AddToCartButton disabled={!product.isAvailable} />
       </div>
     </div>
   );

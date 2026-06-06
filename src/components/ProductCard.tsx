@@ -9,7 +9,7 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <article className="group border border-gray-200 dark:border-zinc-600 rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 transition-all duration-300 hover:shadow-lg dark:hover:shadow-zinc-950/50">
@@ -37,7 +37,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.price.toFixed(2)} zł
         </p>
 
-        <AddToCartButton />
+        <p
+          className={`mt-2 text-sm ${
+            product.isAvailable
+              ? "text-green-700 dark:text-green-400"
+              : "text-red-600 dark:text-red-400"
+          }`}
+        >
+          {product.isAvailable ? t.product.inStock : t.product.outOfStock}
+        </p>
+
+        <AddToCartButton disabled={!product.isAvailable} />
       </div>
     </article>
   );

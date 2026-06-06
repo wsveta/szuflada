@@ -22,10 +22,13 @@ export const siteText = {
             viewAll: "Zobacz wszystkie →",
         },
         product: {
-            addToCart: "Dodaj do koszyka",
-            backToShop: "← Powrót do sklepu",
-            notFound: "Produkt nie został znaleziony",
-        },
+  addToCart: "Dodaj do koszyka",
+  backToShop: "← Powrót do sklepu",
+  notFound: "Produkt nie został znaleziony",
+  inStock: "Dostępny",
+  outOfStock: "Brak w magazynie",
+  stockCount: "Dostępne sztuki",
+},
         modal: {
             title: "Dziękujemy za zainteresowanie!",
             text1:
@@ -92,10 +95,13 @@ export const siteText = {
             viewAll: "Переглянути всі →",
         },
         product: {
-            addToCart: "Додати в кошик",
-            backToShop: "← Назад до магазину",
-            notFound: "Товар не знайдено",
-        },
+  addToCart: "Додати в кошик",
+  backToShop: "← Назад до магазину",
+  notFound: "Товар не знайдено",
+  inStock: "Є в наявності",
+  outOfStock: "Немає в наявності",
+  stockCount: "Доступно",
+},
         modal: {
             title: "Дякуємо за інтерес!",
             text1:

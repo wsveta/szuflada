@@ -1,10 +1,14 @@
 "use client";
 
 import ProductCard from "./ProductCard";
-import { products } from "@/data/products";
+import type { Product } from "@/types/product";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function ProductGrid() {
+type ProductGridProps = {
+  products: Product[];
+};
+
+export default function ProductGrid({ products }: ProductGridProps) {
   const { t } = useLanguage();
 
   return (
