@@ -14,11 +14,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
   return (
       <div>
           
-      <h1 className="text-4xl font-bold">{product.name[language]}</h1>
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{product.name[language]}</h1>
 
-      <p className="mt-4 text-2xl">{product.price.toFixed(2)} zł</p>
+      <p className="mt-4 text-2xl text-gray-900 dark:text-white">{product.price.toFixed(2)} zł</p>
 
-      <p className="mt-6 text-gray-600">{product.description[language]}</p>
+      <p className="mt-6 text-gray-600 dark:text-zinc-300">{product.description[language]}</p>
 
       <div className="mt-4 max-w-xs">
         <AddToCartButton />

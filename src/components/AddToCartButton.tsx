@@ -12,7 +12,7 @@ export default function AddToCartButton() {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="mt-4 w-full rounded-full bg-black text-white py-3 text-sm"
+        className="mt-4 w-full rounded-full bg-black text-white dark:bg-white dark:text-black py-3 text-sm"
       >
         {t.product.addToCart}
       </button>

@@ -12,7 +12,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const { language } = useLanguage();
 
   return (
-    <article className="border border-gray-200 rounded-2xl overflow-hidden">
+    <article className="border border-gray-200 dark:border-zinc-600 rounded-2xl overflow-hidden bg-white dark:bg-zinc-900">
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-square bg-gray-100">
           <Image
@@ -28,12 +28,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="p-4">
         <Link
           href={`/products/${product.id}`}
-          className="font-medium text-gray-900 hover:underline"
+          className="font-medium text-gray-900 dark:text-white hover:underline"
         >
           {product.name[language]}
         </Link>
 
-        <p className="mt-2 text-gray-600">{product.price.toFixed(2)} zł</p>
+        <p className="mt-2 text-gray-600 dark:text-zinc-400">{product.price.toFixed(2)} zł</p>
 
         <AddToCartButton />
       </div>

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import BackToShopLink from "@/components/BackToShopLink";
 import { products } from "@/data/products";
 import ProductDetails from "@/components/ProductDetails";
+import DemoBanner from "@/components/DemoBanner";
 
 type ProductPageProps = {
   params: Promise<{
@@ -25,14 +26,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <>
+      <>
+          <DemoBanner/>
       <Header />
 
-          <main className="max-w-7xl mx-auto px-6 py-16">
+          <main className="max-w-7xl mx-auto px-6 py-16 bg-white dark:bg-zinc-950">
               <BackToShopLink />
 
         <div className="mt-8 grid lg:grid-cols-2 gap-12">
-          <div className="relative aspect-square rounded-3xl overflow-hidden bg-gray-100">
+          <div className="relative aspect-square rounded-3xl overflow-hidden bg-gray-100 dark:bg-zinc-900">
             <Image
               src={product.image}
               alt="Product image"
@@ -44,9 +46,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <ProductDetails product={product} />
         </div>
+      <Footer />
       </main>
 
-      <Footer />
     </>
   );
 }
