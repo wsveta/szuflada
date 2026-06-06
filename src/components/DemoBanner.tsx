@@ -1,9 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
+
 
 export default function DemoBanner() {
   const [isVisible, setIsVisible] = useState(false);
+  const { language } = useLanguage();
+
+  const { t } = useLanguage();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,8 +31,8 @@ export default function DemoBanner() {
       `}
     >
       <div className="bg-black text-white text-center text-sm py-2 dark:bg-white dark:text-black">
-        🛍️ Магазин перебуває на етапі підготовки до запуску. Це демонстраційна версія.
-      </div>
+  {t.demoBanner.text}
+</div>
     </div>
   );
 }

@@ -1,5 +1,8 @@
 export const siteText = {
     pl: {
+        demoBanner: {
+      text: "🛍️ Sklep jest obecnie w fazie przygotowań do uruchomienia. To wersja demonstracyjna.",
+    },
         nav: {
             catalog: "Katalog",
             about: "O projekcie",
@@ -63,9 +66,13 @@ export const siteText = {
         footer: {
             tagline: "Praktyczne drobiazgi do domu",
         },
+        
     },
 
     uk: {
+        demoBanner: {
+      text: "🛍️ Магазин перебуває на етапі підготовки до запуску. Це демонстраційна версія.",
+    },
         nav: {
             catalog: "Каталог",
             about: "Про проєкт",
