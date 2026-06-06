@@ -22,14 +22,17 @@ export default function SupportModal({ onClose }: SupportModalProps) {
         <div className="mt-6 flex flex-col gap-3">
           <Link
             href="/support"
-            className="text-center rounded-full bg-black text-white py-3"
+            className="text-center rounded-full bg-black text-white py-3 transition-all duration-200
+          hover:bg-zinc-800
+          hover:-translate-y-0.5"
           >
             {t.modal.support}
           </Link>
 
           <button
             onClick={onClose}
-            className="rounded-full border border-gray-300 py-3 text-black hover:bg-gray-50"
+            className="rounded-full border border-gray-300 py-3 text-black hover:bg-gray-50 transition-all duration-200
+          hover:-translate-y-0.5"
           >
             {t.modal.back}
           </button>
@@ -38,4 +41,3 @@ export default function SupportModal({ onClose }: SupportModalProps) {
     </div>
   );
 }
-
