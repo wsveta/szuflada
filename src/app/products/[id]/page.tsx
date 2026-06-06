@@ -26,29 +26,31 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-      <>
-          <DemoBanner/>
-      <Header />
+  <>
+    <DemoBanner />
+    <Header />
 
-          <main className="max-w-7xl mx-auto px-6 py-16 bg-white dark:bg-zinc-950">
-              <BackToShopLink />
+    <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+        <BackToShopLink />
 
-        <div className="mt-8 grid lg:grid-cols-2 gap-12">
+        <div className="mt-8 grid lg:grid-cols-2 gap-8 lg:gap-12">
           <div className="relative aspect-square rounded-3xl overflow-hidden bg-gray-100 dark:bg-zinc-900">
             <Image
               src={product.image}
               alt="Product image"
               fill
-              sizes="50vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
           </div>
 
           <ProductDetails product={product} />
         </div>
-      <Footer />
-      </main>
+      </section>
 
-    </>
-  );
+      <Footer />
+    </main>
+  </>
+);
 }

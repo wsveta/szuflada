@@ -8,46 +8,52 @@ export default function Footer() {
   const { t } = useLanguage();
 
   const router = useRouter();
-const pathname = usePathname();
+  const pathname = usePathname();
 
-const scrollToSection = (id: string) => {
-  if (pathname !== "/") {
-    router.push(`/#${id}`);
-    return;
-  }
+  const scrollToSection = (id: string) => {
+    if (pathname !== "/") {
+      router.push(`/#${id}`);
+      return;
+    }
 
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-};
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <footer className="border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+    <footer className="border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mt-16 md:mt-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">SZUFLADA</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              SZUFLADA
+            </h2>
 
-            <p className="mt-2 text-sm text-gray-500 dark:text-zinc-400">
+            <p className="mt-2 text-sm text-gray-500 dark:text-zinc-400 max-w-sm">
               {t.footer.tagline}
             </p>
           </div>
 
-          <nav className="flex flex-col md:flex-row gap-4 md:gap-8">
+          <nav className="flex flex-col sm:flex-row gap-4 sm:gap-8">
             <button
-  onClick={() => scrollToSection("catalog")}
-  className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
->
-  {t.nav.catalog}
-</button>
+              onClick={() => scrollToSection("catalog")}
+              className="text-left text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+            >
+              {t.nav.catalog}
+            </button>
 
-
-            <Link href="/support" className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white">
+            <Link
+              href="/support"
+              className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+            >
               {t.nav.launch}
             </Link>
           </nav>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-gray-100">
-          <p className="text-sm text-gray-500 dark:text-zinc-500">© 2026 SZUFLADA</p>
+        <div className="mt-8 md:mt-10 pt-6 border-t border-gray-100 dark:border-zinc-800">
+          <p className="text-sm text-gray-500 dark:text-zinc-500">
+            © 2026 SZUFLADA
+          </p>
         </div>
       </div>
     </footer>

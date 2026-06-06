@@ -1,25 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter, usePathname } from "next/navigation";
 
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme } = useTheme();
 
   const router = useRouter();
-const pathname = usePathname();
+  const pathname = usePathname();
 
-const scrollToSection = (id: string) => {
-  if (pathname !== "/") {
-    router.push(`/#${id}`);
-    return;
-  }
+  const scrollToSection = (id: string) => {
+    setIsMenuOpen(false);
 
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-};
+    if (pathname !== "/") {
+      router.push(`/#${id}`);
+      return;
+    }
+
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <header className="border-b border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
@@ -27,24 +32,25 @@ const scrollToSection = (id: string) => {
         <Link
           href="/"
           className="text-xl font-bold tracking-wide text-gray-900 dark:text-white"
+          onClick={() => setIsMenuOpen(false)}
         >
           SZUFLADA
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
-   <button
-  onClick={() => scrollToSection("catalog")}
-  className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
->
-  {t.nav.catalog}
-</button>
+        <nav className="hidden lg:flex items-center gap-8">
+          <button
+            onClick={() => scrollToSection("catalog")}
+            className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+          >
+            {t.nav.catalog}
+          </button>
 
-<button
-  onClick={() => scrollToSection("about")}
-  className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
->
-  {t.nav.about}
-</button>
+          <button
+            onClick={() => scrollToSection("about")}
+            className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+          >
+            {t.nav.about}
+          </button>
 
           <Link
             href="/support"
@@ -105,7 +111,106 @@ const scrollToSection = (id: string) => {
             </button>
           </div>
         </nav>
+
+        <button
+          onClick={() => setIsMenuOpen((value) => !value)}
+          className="lg:hidden text-gray-900 dark:text-white"
+        >
+          {isMenuOpen ? "Close" : "Menu"}
+        </button>
       </div>
+
+      {isMenuOpen && (
+        <div className="lg:hidden border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <nav className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-5">
+            <button
+              onClick={() => scrollToSection("catalog")}
+              className="text-left text-gray-700 dark:text-zinc-200"
+            >
+              {t.nav.catalog}
+            </button>
+
+            <button
+              onClick={() => scrollToSection("about")}
+              className="text-left text-gray-700 dark:text-zinc-200"
+            >
+              {t.nav.about}
+            </button>
+
+            <Link
+              href="/support"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-gray-700 dark:text-zinc-200"
+            >
+              {t.nav.launch}
+            </Link>
+
+            <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-between">
+              <span className="text-sm text-gray-500 dark:text-zinc-400">
+                Language
+              </span>
+
+              <div className="flex items-center gap-2 text-sm">
+                <button
+                  onClick={() => setLanguage("pl")}
+                  className={
+                    language === "pl"
+                      ? "font-bold text-black dark:text-white"
+                      : "text-gray-400 dark:text-zinc-500"
+                  }
+                >
+                  PL
+                </button>
+
+                <span className="text-gray-300 dark:text-zinc-700">/</span>
+
+                <button
+                  onClick={() => setLanguage("uk")}
+                  className={
+                    language === "uk"
+                      ? "font-bold text-black dark:text-white"
+                      : "text-gray-400 dark:text-zinc-500"
+                  }
+                >
+                  UA
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-between">
+              <span className="text-sm text-gray-500 dark:text-zinc-400">
+                Theme
+              </span>
+
+              <div className="flex items-center gap-2 text-sm">
+                <button
+                  onClick={() => setTheme("light")}
+                  className={
+                    theme === "light"
+                      ? "font-bold text-black dark:text-white"
+                      : "text-gray-400 dark:text-zinc-500"
+                  }
+                >
+                  Light
+                </button>
+
+                <span className="text-gray-300 dark:text-zinc-700">/</span>
+
+                <button
+                  onClick={() => setTheme("dark")}
+                  className={
+                    theme === "dark"
+                      ? "font-bold text-black dark:text-white"
+                      : "text-gray-400 dark:text-zinc-500"
+                  }
+                >
+                  Dark
+                </button>
+              </div>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
