@@ -2,12 +2,25 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Footer() {
   const { t } = useLanguage();
 
+  const router = useRouter();
+const pathname = usePathname();
+
+const scrollToSection = (id: string) => {
+  if (pathname !== "/") {
+    router.push(`/#${id}`);
+    return;
+  }
+
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+};
+
   return (
-    <footer className="border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+    <footer className="border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 mt-24">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           <div>
@@ -19,13 +32,13 @@ export default function Footer() {
           </div>
 
           <nav className="flex flex-col md:flex-row gap-4 md:gap-8">
-            <Link href="/#catalog" className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white">
-              {t.nav.catalog}
-            </Link>
+            <button
+  onClick={() => scrollToSection("catalog")}
+  className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+>
+  {t.nav.catalog}
+</button>
 
-            <Link href="/#about" className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white">
-              {t.nav.about}
-            </Link>
 
             <Link href="/support" className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white">
               {t.nav.launch}

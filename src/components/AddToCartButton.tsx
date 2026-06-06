@@ -12,12 +12,22 @@ export default function AddToCartButton() {
     <>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="mt-4 w-full rounded-full bg-black text-white dark:bg-white dark:text-black py-3 text-sm"
+        className="
+          mt-4 w-full rounded-full py-3 text-sm
+          bg-black text-white
+          dark:bg-white dark:text-black
+          transition-all duration-200
+          hover:bg-zinc-800
+          dark:hover:bg-zinc-200
+          hover:-translate-y-0.5
+        "
       >
         {t.product.addToCart}
       </button>
 
-      {isModalOpen && <SupportModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <SupportModal onClose={() => setIsModalOpen(false)} />
+      )}
     </>
   );
 }

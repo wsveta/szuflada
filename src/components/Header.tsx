@@ -3,10 +3,23 @@
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Header() {
   const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme } = useTheme();
+
+  const router = useRouter();
+const pathname = usePathname();
+
+const scrollToSection = (id: string) => {
+  if (pathname !== "/") {
+    router.push(`/#${id}`);
+    return;
+  }
+
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+};
 
   return (
     <header className="border-b border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
@@ -19,19 +32,19 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          <Link
-            href="/#catalog"
-            className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
-          >
-            {t.nav.catalog}
-          </Link>
+   <button
+  onClick={() => scrollToSection("catalog")}
+  className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+>
+  {t.nav.catalog}
+</button>
 
-          <Link
-            href="/#about"
-            className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
-          >
-            {t.nav.about}
-          </Link>
+<button
+  onClick={() => scrollToSection("about")}
+  className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+>
+  {t.nav.about}
+</button>
 
           <Link
             href="/support"

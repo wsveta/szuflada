@@ -52,7 +52,9 @@ export default function SupportPage() {
 
           <Link
             href="https://4fund.com/449vkn"
-            className="mt-8 inline-flex rounded-full bg-black text-white dark:bg-white dark:text-black px-6 py-3"
+            className="mt-8 inline-flex rounded-full bg-black text-white dark:bg-white dark:text-black px-6 py-3 transition-all duration-200
+//     hover:bg-zinc-800
+//     dark:hover:bg-zinc-200"
           >
             {t.support.button}
           </Link>
