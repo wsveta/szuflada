@@ -6,6 +6,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter, usePathname } from "next/navigation";
 import FavoritesLink from "@/components/FavoritesLink";
+import CartLink from "./CartLink";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -92,6 +93,7 @@ export default function Header() {
           </form>
 
           <FavoritesLink />
+          <CartLink />
 
           <div className="flex items-center gap-2 text-sm">
             <button
@@ -203,6 +205,14 @@ export default function Header() {
             >
               ❤️ {t.favorites.nav}
             </Link>
+
+            <Link
+  href="/cart"
+  onClick={() => setIsMenuOpen(false)}
+  className="text-gray-700 dark:text-zinc-200"
+>
+  🛒 {t.cart.nav}
+</Link>
 
             <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-between">
               <span className="text-sm text-gray-500 dark:text-zinc-400">

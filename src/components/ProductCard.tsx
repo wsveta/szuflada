@@ -50,7 +50,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.isAvailable ? t.product.inStock : t.product.outOfStock}
         </p>
 
-        <AddToCartButton disabled={!product.isAvailable} />
+        <AddToCartButton
+  productId={product.id}
+  stock={product.stock}
+  disabled={!product.isAvailable}
+/>
       </div>
     </article>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
+import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,9 @@ export default function RootLayout({
         <ThemeProvider>
           <LanguageProvider>
             <FavoritesProvider>
-              {children}
+              <CartProvider>
+                {children}
+              </CartProvider>
             </FavoritesProvider>
           </LanguageProvider>
         </ThemeProvider>

@@ -1,5 +1,15 @@
 export const siteText = {
     pl: {
+        cart: {
+  nav: "Koszyk",
+  title: "Koszyk",
+  empty: "Koszyk jest pusty",
+  remove: "Usuń",
+  summary: "Podsumowanie",
+  items: "Produkty",
+  total: "Razem",
+  clear: "Wyczyść koszyk",
+},
         favorites: {
   title: "Ulubione produkty",
   empty: "Nie masz jeszcze ulubionych produktów.",
@@ -91,6 +101,16 @@ export const siteText = {
     },
 
     uk: {
+       cart: {
+  nav: "Кошик",
+  title: "Кошик",
+  empty: "Кошик порожній",
+  remove: "Видалити",
+  summary: "Підсумок",
+  items: "Товари",
+  total: "Разом",
+  clear: "Очистити кошик",
+},
         favorites: {
   title: "Улюблені товари",
   empty: "У тебе ще немає улюблених товарів.",

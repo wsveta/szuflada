@@ -38,7 +38,11 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
       </p>
 
       <div className="mt-6 w-full sm:max-w-xs">
-        <AddToCartButton disabled={!product.isAvailable} />
+       <AddToCartButton
+  productId={product.id}
+  stock={product.stock}
+  disabled={!product.isAvailable}
+/>
       </div>
     </div>
   );
