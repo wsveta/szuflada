@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,11 @@ export default function RootLayout({
     <html lang="pl">
       <body>
         <ThemeProvider>
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            <FavoritesProvider>
+              {children}
+            </FavoritesProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

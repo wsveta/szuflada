@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useRouter, usePathname } from "next/navigation";
+import FavoritesLink from "@/components/FavoritesLink";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -89,6 +90,8 @@ export default function Header() {
               "
             />
           </form>
+
+          <FavoritesLink />
 
           <div className="flex items-center gap-2 text-sm">
             <button
@@ -191,6 +194,14 @@ export default function Header() {
               className="text-gray-700 dark:text-zinc-200"
             >
               {t.nav.launch}
+            </Link>
+
+            <Link
+              href="/favorites"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-gray-700 dark:text-zinc-200"
+            >
+              ❤️ {t.favorites.nav}
             </Link>
 
             <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-between">

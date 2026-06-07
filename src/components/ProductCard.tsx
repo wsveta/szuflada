@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Product } from "@/types/product";
 import AddToCartButton from "./AddToCartButton";
 import { useLanguage } from "@/context/LanguageContext";
+import FavoriteButton from "./FavoriteButton";
 
 type ProductCardProps = {
   product: Product;
@@ -16,6 +17,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     <article className="group border border-gray-200 dark:border-zinc-600 rounded-2xl overflow-hidden bg-white dark:bg-zinc-900 transition-all duration-300 hover:shadow-lg dark:hover:shadow-zinc-950/50">
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-square bg-gray-100 overflow-hidden">
+            <FavoriteButton productId={product.id} />
           <Image
             src={product.image}
             alt={product.name[language]}

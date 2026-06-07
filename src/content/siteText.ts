@@ -1,5 +1,10 @@
 export const siteText = {
     pl: {
+        favorites: {
+  title: "Ulubione produkty",
+  empty: "Nie masz jeszcze ulubionych produktów.",
+  nav: "Ulubione"
+},
         categories: {
   all: "Wszystkie",
   bags: "Torby",
@@ -86,6 +91,11 @@ export const siteText = {
     },
 
     uk: {
+        favorites: {
+  title: "Улюблені товари",
+  empty: "У тебе ще немає улюблених товарів.",
+   nav: "Улюблені",
+},
         categories: {
   all: "Всі",
   bags: "Сумки",

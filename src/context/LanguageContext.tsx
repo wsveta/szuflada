@@ -35,8 +35,8 @@ export function LanguageProvider({
   };
 if (!isReady) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="h-10 w-10 rounded-full border-2 border-gray-200 border-t-black animate-spin" />
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950">
+      <div className="h-10 w-10 rounded-full border-2 border-gray-200 border-t-black dark:border-zinc-700 dark:border-t-white animate-spin" />
     </div>
   );
 }
