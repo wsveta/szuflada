@@ -7,6 +7,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { useRouter, usePathname } from "next/navigation";
 import FavoritesLink from "@/components/FavoritesLink";
 import CartLink from "./CartLink";
+import AuthButton from "./AuthButton";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -146,6 +147,8 @@ export default function Header() {
               Dark
             </button>
           </div>
+          <AuthButton />
+
         </nav>
 
         <button

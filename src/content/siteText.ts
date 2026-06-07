@@ -1,36 +1,63 @@
 export const siteText = {
     pl: {
+        auth: {
+            loginRequired: "Musisz się zalogować, aby zobaczyć profil.",
+            googleLogin: "Kontynuuj z Google",
+            loginTitle: "Logowanie",
+            registerTitle: "Rejestracja",
+
+            email: "Email",
+            password: "Hasło",
+
+            loginButton: "Zaloguj się",
+            loginLoading: "Logowanie...",
+
+            registerButton: "Utwórz konto",
+            registerLoading: "Tworzenie konta...",
+
+            noAccount: "Nie masz konta?",
+            haveAccount: "Masz już konto?",
+
+            registerLink: "Zarejestruj się",
+            loginLink: "Zaloguj się",
+
+            registrationSuccess:
+                "Konto zostało utworzone. Sprawdź email, aby potwierdzić rejestrację.",
+
+            logout: "Wyloguj",
+            profile: "Profil",
+        },
         cart: {
-  nav: "Koszyk",
-  title: "Koszyk",
-  empty: "Koszyk jest pusty",
-  remove: "Usuń",
-  summary: "Podsumowanie",
-  items: "Produkty",
-  total: "Razem",
-  clear: "Wyczyść koszyk",
-},
+            nav: "Koszyk",
+            title: "Koszyk",
+            empty: "Koszyk jest pusty",
+            remove: "Usuń",
+            summary: "Podsumowanie",
+            items: "Produkty",
+            total: "Razem",
+            clear: "Wyczyść koszyk",
+        },
         favorites: {
-  title: "Ulubione produkty",
-  empty: "Nie masz jeszcze ulubionych produktów.",
-  nav: "Ulubione"
-},
+            title: "Ulubione produkty",
+            empty: "Nie masz jeszcze ulubionych produktów.",
+            nav: "Ulubione"
+        },
         categories: {
-  all: "Wszystkie",
-  bags: "Torby",
-  notepads: "Notesy",
-  kitchen: "Kuchnia",
-},
-     search: {
-  placeholder: "Szukaj produktów...",
-  title: "Wyniki wyszukiwania",
-  query: "Zapytanie",
-  enterQuery: "Wpisz frazę, aby znaleźć produkty.",
-  empty: "Nie znaleziono produktów.",
-},
+            all: "Wszystkie",
+            bags: "Torby",
+            notepads: "Notesy",
+            kitchen: "Kuchnia",
+        },
+        search: {
+            placeholder: "Szukaj produktów...",
+            title: "Wyniki wyszukiwania",
+            query: "Zapytanie",
+            enterQuery: "Wpisz frazę, aby znaleźć produkty.",
+            empty: "Nie znaleziono produktów.",
+        },
         demoBanner: {
-      text: "🛍️ Sklep jest obecnie w fazie przygotowań do uruchomienia. To wersja demonstracyjna.",
-    },
+            text: "🛍️ Sklep jest obecnie w fazie przygotowań do uruchomienia. To wersja demonstracyjna.",
+        },
         nav: {
             catalog: "Katalog",
             about: "O projekcie",
@@ -50,13 +77,13 @@ export const siteText = {
             viewAll: "Zobacz wszystkie →",
         },
         product: {
-  addToCart: "Dodaj do koszyka",
-  backToShop: "← Powrót do sklepu",
-  notFound: "Produkt nie został znaleziony",
-  inStock: "Dostępny",
-  outOfStock: "Brak w magazynie",
-  stockCount: "Dostępne sztuki",
-},
+            addToCart: "Dodaj do koszyka",
+            backToShop: "← Powrót do sklepu",
+            notFound: "Produkt nie został znaleziony",
+            inStock: "Dostępny",
+            outOfStock: "Brak w magazynie",
+            stockCount: "Dostępne sztuki",
+        },
         modal: {
             title: "Dziękujemy za zainteresowanie!",
             text1:
@@ -97,41 +124,68 @@ export const siteText = {
         footer: {
             tagline: "Praktyczne drobiazgi do domu",
         },
-        
+
     },
 
     uk: {
-       cart: {
-  nav: "Кошик",
-  title: "Кошик",
-  empty: "Кошик порожній",
-  remove: "Видалити",
-  summary: "Підсумок",
-  items: "Товари",
-  total: "Разом",
-  clear: "Очистити кошик",
-},
+        auth: {
+            loginRequired: "Потрібно увійти, щоб переглянути профіль.",
+            googleLogin: "Продовжити з Google",
+            loginTitle: "Вхід",
+            registerTitle: "Реєстрація",
+
+            email: "Email",
+            password: "Пароль",
+
+            loginButton: "Увійти",
+            loginLoading: "Вхід...",
+
+            registerButton: "Створити акаунт",
+            registerLoading: "Створення акаунта...",
+
+            noAccount: "Ще немає акаунта?",
+            haveAccount: "Вже маєте акаунт?",
+
+            registerLink: "Зареєструватися",
+            loginLink: "Увійти",
+
+            registrationSuccess:
+                "Акаунт створено. Перевірте електронну пошту для підтвердження реєстрації.",
+
+            logout: "Вийти",
+            profile: "Профіль",
+        },
+        cart: {
+            nav: "Кошик",
+            title: "Кошик",
+            empty: "Кошик порожній",
+            remove: "Видалити",
+            summary: "Підсумок",
+            items: "Товари",
+            total: "Разом",
+            clear: "Очистити кошик",
+        },
         favorites: {
-  title: "Улюблені товари",
-  empty: "У тебе ще немає улюблених товарів.",
-   nav: "Улюблені",
-},
+            title: "Улюблені товари",
+            empty: "У тебе ще немає улюблених товарів.",
+            nav: "Улюблені",
+        },
         categories: {
-  all: "Всі",
-  bags: "Сумки",
-  notepads: "Блокноти",
-  kitchen: "Кухня",
-},
-      search: {
-  placeholder: "Пошук товарів...",
-  title: "Результати пошуку",
-  query: "Запит",
-  enterQuery: "Введіть запит, щоб знайти товари.",
-  empty: "Товарів не знайдено.",
-},
+            all: "Всі",
+            bags: "Сумки",
+            notepads: "Блокноти",
+            kitchen: "Кухня",
+        },
+        search: {
+            placeholder: "Пошук товарів...",
+            title: "Результати пошуку",
+            query: "Запит",
+            enterQuery: "Введіть запит, щоб знайти товари.",
+            empty: "Товарів не знайдено.",
+        },
         demoBanner: {
-      text: "🛍️ Магазин перебуває на етапі підготовки до запуску. Це демонстраційна версія.",
-    },
+            text: "🛍️ Магазин перебуває на етапі підготовки до запуску. Це демонстраційна версія.",
+        },
         nav: {
             catalog: "Каталог",
             about: "Про проєкт",
@@ -151,13 +205,13 @@ export const siteText = {
             viewAll: "Переглянути всі →",
         },
         product: {
-  addToCart: "Додати в кошик",
-  backToShop: "← Назад до магазину",
-  notFound: "Товар не знайдено",
-  inStock: "Є в наявності",
-  outOfStock: "Немає в наявності",
-  stockCount: "Доступно",
-},
+            addToCart: "Додати в кошик",
+            backToShop: "← Назад до магазину",
+            notFound: "Товар не знайдено",
+            inStock: "Є в наявності",
+            outOfStock: "Немає в наявності",
+            stockCount: "Доступно",
+        },
         modal: {
             title: "Дякуємо за інтерес!",
             text1:

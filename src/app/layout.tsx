@@ -3,6 +3,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,11 +21,13 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <LanguageProvider>
-            <FavoritesProvider>
-              <CartProvider>
-                {children}
-              </CartProvider>
-            </FavoritesProvider>
+            <AuthProvider>
+              <FavoritesProvider>
+                <CartProvider>
+                  {children}
+                </CartProvider>
+              </FavoritesProvider>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>
