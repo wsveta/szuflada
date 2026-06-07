@@ -62,3 +62,58 @@ export async function getOrderById(
         items: items as OrderItem[],
     };
 }
+
+export async function getAllOrders(): Promise<Order[]> {
+    const { data, error } = await supabase
+        .from("orders")
+        .select("id, status, total_amount, created_at")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data as Order[];
+}
+
+export async function updateOrderStatus(
+    orderId: number,
+    status: string
+): Promise<void> {
+    const { error } = await supabase
+        .from("orders")
+        .update({ status })
+        .eq("id", orderId);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+}
+
+export async function getAdminOrderById(
+    orderId: number
+): Promise<OrderDetails | null> {
+    const { data: order, error: orderError } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("id", orderId)
+        .single();
+
+    if (orderError || !order) {
+        return null;
+    }
+
+    const { data: items, error: itemsError } = await supabase
+        .from("order_items")
+        .select("*")
+        .eq("order_id", orderId);
+
+    if (itemsError) {
+        throw new Error(itemsError.message);
+    }
+
+    return {
+        ...order,
+        items: items ?? [],
+    } as OrderDetails;
+}
