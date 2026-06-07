@@ -1,5 +1,50 @@
 export const siteText = {
     pl: {
+        orders: {
+            title: "Moje zamówienia",
+            empty: "Nie masz jeszcze żadnych zamówień.",
+            orderNumber: "Zamówienie",
+            status: "Status",
+            total: "Razem",
+            createdAt: "Data",
+            viewOrder: "Zobacz zamówienie",
+            items: "Produkty",
+            quantity: "Ilość",
+            price: "Cena",
+        },
+        orderSuccess: {
+            title: "Dziękujemy za zamówienie!",
+            orderNumber: "Numer zamówienia",
+            description:
+                "Twoje zamówienie zostało zapisane. Wkrótce otrzymasz dalsze informacje.",
+            backToShop: "Wróć do sklepu",
+        },
+        checkout: {
+            goToCheckout: "Przejdź do kasy",
+            title: "Zamówienie",
+
+            firstName: "Imię",
+            lastName: "Nazwisko",
+            email: "Email",
+            phone: "Telefon",
+
+            country: "Kraj",
+            city: "Miasto",
+            postalCode: "Kod pocztowy",
+            addressLine1: "Adres",
+            addressLine2: "Mieszkanie / lokal (opcjonalnie)",
+
+            deliveryMethod: "Sposób dostawy",
+            courier: "Kurier",
+            parcelLocker: "Paczkomat",
+
+            paymentMethod: "Sposób płatności",
+            bankTransfer: "Przelew bankowy",
+            cashOnDelivery: "Płatność przy odbiorze",
+
+            placeOrder: "Złóż zamówienie",
+            submitted: "Formularz zamówienia został wysłany.",
+        },
         auth: {
             loginRequired: "Musisz się zalogować, aby zobaczyć profil.",
             googleLogin: "Kontynuuj z Google",
@@ -128,6 +173,51 @@ export const siteText = {
     },
 
     uk: {
+        orders: {
+            title: "Мої замовлення",
+            empty: "У вас ще немає замовлень.",
+            orderNumber: "Замовлення",
+            status: "Статус",
+            total: "Разом",
+            createdAt: "Дата",
+            viewOrder: "Переглянути замовлення",
+            items: "Товари",
+            quantity: "Кількість",
+            price: "Ціна",
+        },
+        orderSuccess: {
+            title: "Дякуємо за замовлення!",
+            orderNumber: "Номер замовлення",
+            description:
+                "Ваше замовлення збережено. Найближчим часом ви отримаєте подальшу інформацію.",
+            backToShop: "Повернутися до магазину",
+        },
+        checkout: {
+            goToCheckout: "Перейти до оформлення",
+            title: "Оформлення замовлення",
+
+            firstName: "Імʼя",
+            lastName: "Прізвище",
+            email: "Email",
+            phone: "Телефон",
+
+            country: "Країна",
+            city: "Місто",
+            postalCode: "Поштовий індекс",
+            addressLine1: "Адреса",
+            addressLine2: "Квартира / приміщення (необовʼязково)",
+
+            deliveryMethod: "Спосіб доставки",
+            courier: "Курʼєр",
+            parcelLocker: "Поштомат",
+
+            paymentMethod: "Спосіб оплати",
+            bankTransfer: "Банківський переказ",
+            cashOnDelivery: "Оплата при отриманні",
+
+            placeOrder: "Оформити замовлення",
+            submitted: "Форму замовлення надіслано.",
+        },
         auth: {
             loginRequired: "Потрібно увійти, щоб переглянути профіль.",
             googleLogin: "Продовжити з Google",

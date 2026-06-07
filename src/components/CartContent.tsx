@@ -152,13 +152,26 @@ export default function CartContent({ products }: CartContentProps) {
                 <span>{totalPrice.toFixed(2)} zł</span>
               </div>
             </div>
-
+<Link
+  href="/checkout"
+  className="
+    mt-6 flex w-full justify-center rounded-full
+    bg-black text-white
+    dark:bg-white dark:text-black
+    py-3 text-sm
+    transition-all duration-200
+    hover:bg-zinc-800
+    dark:hover:bg-zinc-200
+  "
+>
+  {t.checkout.goToCheckout}
+</Link>
             <button
-              onClick={clearCart}
-              className="mt-6 w-full rounded-full border border-gray-300 dark:border-zinc-700 py-3 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-800"
-            >
-              {t.cart.clear}
-            </button>
+  onClick={clearCart}
+  className="mt-3 w-full rounded-full border border-gray-300 dark:border-zinc-700 py-3 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-800"
+>
+  {t.cart.clear}
+</button>
           </aside>
         </div>
       )}

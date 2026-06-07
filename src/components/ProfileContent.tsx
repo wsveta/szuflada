@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
+import OrdersList from "@/components/OrdersList";
 
 export default function ProfileContent() {
   const { user, isLoading } = useAuth();
@@ -29,7 +30,16 @@ export default function ProfileContent() {
 
         <Link
           href="/login"
-          className="mt-6 inline-flex rounded-full bg-black text-white dark:bg-white dark:text-black px-6 py-3"
+          className="
+            mt-6 inline-flex rounded-full
+            bg-black text-white
+            dark:bg-white dark:text-black
+            px-6 py-3
+            transition-all duration-200
+            hover:bg-zinc-800
+            dark:hover:bg-zinc-200
+            hover:-translate-y-0.5
+          "
         >
           {t.auth.loginButton}
         </Link>
@@ -52,6 +62,8 @@ export default function ProfileContent() {
           {user.email}
         </p>
       </div>
+
+      <OrdersList />
     </section>
   );
 }
