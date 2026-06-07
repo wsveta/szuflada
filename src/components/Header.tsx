@@ -8,6 +8,7 @@ import { useRouter, usePathname } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme } = useTheme();
@@ -26,6 +27,19 @@ export default function Header() {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimmedQuery = query.trim();
+
+    if (!trimmedQuery) {
+      return;
+    }
+
+    setIsMenuOpen(false);
+    router.push(`/search?q=${encodeURIComponent(trimmedQuery)}`);
+  };
+
   return (
     <header className="border-b border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -37,7 +51,7 @@ export default function Header() {
           SZUFLADA
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-6">
           <button
             onClick={() => scrollToSection("catalog")}
             className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
@@ -58,6 +72,23 @@ export default function Header() {
           >
             {t.nav.launch}
           </Link>
+
+          <form onSubmit={handleSearchSubmit}>
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t.search.placeholder}
+              className="
+                w-48 rounded-full border border-gray-300
+                bg-white px-4 py-2 text-sm text-gray-900
+                outline-none transition-colors
+                placeholder:text-gray-400
+                focus:border-gray-500
+                dark:border-zinc-700 dark:bg-zinc-900 dark:text-white
+                dark:placeholder:text-zinc-500 dark:focus:border-zinc-400
+              "
+            />
+          </form>
 
           <div className="flex items-center gap-2 text-sm">
             <button
@@ -123,6 +154,23 @@ export default function Header() {
       {isMenuOpen && (
         <div className="lg:hidden border-t border-gray-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <nav className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-5">
+            <form onSubmit={handleSearchSubmit}>
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={t.search.placeholder}
+                className="
+                  w-full rounded-full border border-gray-300
+                  bg-white px-4 py-3 text-sm text-gray-900
+                  outline-none transition-colors
+                  placeholder:text-gray-400
+                  focus:border-gray-500
+                  dark:border-zinc-700 dark:bg-zinc-900 dark:text-white
+                  dark:placeholder:text-zinc-500 dark:focus:border-zinc-400
+                "
+              />
+            </form>
+
             <button
               onClick={() => scrollToSection("catalog")}
               className="text-left text-gray-700 dark:text-zinc-200"

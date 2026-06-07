@@ -1,5 +1,18 @@
 export const siteText = {
     pl: {
+        categories: {
+  all: "Wszystkie",
+  bags: "Torby",
+  notepads: "Notesy",
+  kitchen: "Kuchnia",
+},
+     search: {
+  placeholder: "Szukaj produktów...",
+  title: "Wyniki wyszukiwania",
+  query: "Zapytanie",
+  enterQuery: "Wpisz frazę, aby znaleźć produkty.",
+  empty: "Nie znaleziono produktów.",
+},
         demoBanner: {
       text: "🛍️ Sklep jest obecnie w fazie przygotowań do uruchomienia. To wersja demonstracyjna.",
     },
@@ -73,6 +86,19 @@ export const siteText = {
     },
 
     uk: {
+        categories: {
+  all: "Всі",
+  bags: "Сумки",
+  notepads: "Блокноти",
+  kitchen: "Кухня",
+},
+      search: {
+  placeholder: "Пошук товарів...",
+  title: "Результати пошуку",
+  query: "Запит",
+  enterQuery: "Введіть запит, щоб знайти товари.",
+  empty: "Товарів не знайдено.",
+},
         demoBanner: {
       text: "🛍️ Магазин перебуває на етапі підготовки до запуску. Це демонстраційна версія.",
     },

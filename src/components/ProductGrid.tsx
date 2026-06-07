@@ -27,9 +27,12 @@ export default function ProductGrid({ products }: ProductGridProps) {
           </h2>
         </div>
 
-        <button className="text-left sm:text-right text-sm text-gray-500 dark:text-zinc-400">
+        <a
+          href="/search"
+          className="text-left sm:text-right text-sm text-gray-500 dark:text-zinc-400 hover:text-black dark:hover:text-white"
+        >
           {t.catalog.viewAll}
-        </button>
+        </a>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
