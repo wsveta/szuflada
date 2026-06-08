@@ -22,10 +22,10 @@ export default function AdminProductListItem({
       className="
         rounded-3xl
         border border-gray-200
-        dark:border-zinc-700
         bg-white
-        dark:bg-zinc-900
         p-5
+        dark:border-zinc-700
+        dark:bg-zinc-900
       "
     >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
@@ -51,6 +51,13 @@ export default function AdminProductListItem({
             {product.name.pl}
           </p>
 
+          <p className="mt-1 text-xs font-medium text-gray-500 dark:text-zinc-400">
+            SKU:{" "}
+            <span className="text-gray-700 dark:text-zinc-300">
+              {product.sku || "—"}
+            </span>
+          </p>
+
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500 dark:text-zinc-400">
             <span>{product.price.toFixed(2)} zł</span>
             <span>Stock: {product.stock}</span>
@@ -65,7 +72,7 @@ export default function AdminProductListItem({
             Open product page
           </Link>
 
-          <div className="mt-4 flex flex-wrap gap-3 items-center">
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300">
               <input
                 type="checkbox"
@@ -82,8 +89,8 @@ export default function AdminProductListItem({
               onClick={() => onDelete(product.id)}
               className="
                 rounded-full
-                px-4 py-2 text-sm
-                bg-red-600 text-white
+                bg-red-600 px-4 py-2
+                text-sm text-white
                 hover:bg-red-700
               "
             >
@@ -95,10 +102,11 @@ export default function AdminProductListItem({
               className="
                 rounded-full
                 border border-gray-300
-                dark:border-zinc-700
                 px-4 py-2 text-sm
-                text-gray-700 dark:text-zinc-200
+                text-gray-700
                 hover:bg-gray-100
+                dark:border-zinc-700
+                dark:text-zinc-200
                 dark:hover:bg-zinc-800
               "
             >

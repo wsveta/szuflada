@@ -1,14 +1,14 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
-import RegisterForm from "@/components/RegisterForm";
+import ForgotPasswordForm from "@/components/ForgotPasswordForm";
 import PageShell from "@/components/PageShell";
 
-export default function RegisterPage() {
+export default function ForgotPasswordPage() {
   return (
     <>
-      <PageShell>
-        <RegisterForm />
+       <PageShell>
+        <ForgotPasswordForm/>
       </PageShell>
     </>
   );

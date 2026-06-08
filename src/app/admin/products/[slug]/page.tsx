@@ -5,6 +5,7 @@ import AdminGuard from "@/components/AdminGuard";
 import AdminNav from "@/components/AdminNav";
 import AdminProductDetailsContent from "@/components/AdminProductDetailsContent";
 import { getCategories } from "@/lib/categories";
+import PageShell from "@/components/PageShell";
 
 type AdminProductPageProps = {
   params: Promise<{
@@ -20,18 +21,12 @@ export default async function AdminProductPage({
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
         <AdminNav />
-
         <AdminGuard>
           <AdminProductDetailsContent slug={slug} categories={categories} />
         </AdminGuard>
-
-        <Footer />
-      </main>
+      </PageShell>
     </>
   );
 }

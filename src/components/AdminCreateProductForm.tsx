@@ -26,11 +26,16 @@ type ToastState = {
   hrefLabel?: string;
 };
 
+type ProductFormData = CreateProductInput & {
+  image_url: string;
+  image_urls: string[];
+};
+
 export default function AdminCreateProductForm({
   categories,
   onProductCreated,
 }: AdminCreateProductFormProps) {
-  const [formData, setFormData] = useState<CreateProductInput>({
+  const [formData, setFormData] = useState<ProductFormData>({
     slug: "",
     name_pl: "",
     name_uk: "",
@@ -137,34 +142,16 @@ export default function AdminCreateProductForm({
     setIsSubmitting(true);
 
     try {
-      const finalSlug = await generateUniqueSlug(
-        formData.slug.trim() || formData.name_pl,
-      );
+      const finalSlug = await generateUniqueSlug(formData.name_pl);
 
-      await createProduct({
+      const createdProduct = await createProduct({
         ...formData,
         slug: finalSlug,
         image_url: imageUrls[0] ?? "",
         image_urls: imageUrls,
       });
 
-      onProductCreated({
-        id: finalSlug,
-        slug: finalSlug,
-        name: {
-          pl: formData.name_pl,
-          uk: formData.name_uk,
-        },
-        description: {
-          pl: formData.description_pl,
-          uk: formData.description_uk,
-        },
-        price: formData.price,
-        images: imageUrls,
-        category: formData.category,
-        stock: formData.stock,
-        isAvailable: formData.is_available,
-      });
+      onProductCreated(createdProduct);
 
       setFormData({
         slug: "",
@@ -203,9 +190,10 @@ export default function AdminCreateProductForm({
       className="
         mt-8 rounded-3xl
         border border-gray-200
-        dark:border-zinc-700
-        bg-white dark:bg-zinc-900
+        bg-white
         p-5 space-y-4
+        dark:border-zinc-700
+        dark:bg-zinc-900
       "
     >
       {toast && (
@@ -232,14 +220,15 @@ export default function AdminCreateProductForm({
         Create product
       </h2>
 
-      <input
-        name="slug"
-        placeholder="Slug"
-        value={formData.slug}
-        onChange={handleChange}
-        required
-        className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
-      />
+      <div className="rounded-3xl border border-gray-200 bg-gray-50 p-4 dark:border-zinc-700 dark:bg-zinc-950">
+        <p className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+          Slug will be generated automatically
+        </p>
+
+        <p className="mt-1 text-sm text-gray-900 dark:text-white">
+          {formData.slug || "Generated from product name"}
+        </p>
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <input
@@ -248,7 +237,7 @@ export default function AdminCreateProductForm({
           value={formData.name_pl}
           onChange={handleChange}
           required
-          className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+          className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
         />
 
         <input
@@ -257,7 +246,7 @@ export default function AdminCreateProductForm({
           value={formData.name_uk}
           onChange={handleChange}
           required
-          className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+          className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
         />
       </div>
 
@@ -268,7 +257,7 @@ export default function AdminCreateProductForm({
           value={formData.description_pl}
           onChange={handleChange}
           required
-          className="min-h-24 w-full rounded-3xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+          className="min-h-24 w-full rounded-3xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
         />
 
         <textarea
@@ -277,7 +266,7 @@ export default function AdminCreateProductForm({
           value={formData.description_uk}
           onChange={handleChange}
           required
-          className="min-h-24 w-full rounded-3xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+          className="min-h-24 w-full rounded-3xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
         />
       </div>
 
@@ -305,7 +294,7 @@ export default function AdminCreateProductForm({
             {formData.image_urls.map((imageUrl) => (
               <div
                 key={imageUrl}
-                className="flex items-center gap-3 rounded-2xl border border-gray-200 dark:border-zinc-700 p-3"
+                className="flex items-center gap-3 rounded-2xl border border-gray-200 p-3 dark:border-zinc-700"
               >
                 <img
                   src={imageUrl}
@@ -335,7 +324,7 @@ export default function AdminCreateProductForm({
         value={formData.category}
         onChange={handleChange}
         required
-        className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+        className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
       >
         <option value="">Select category</option>
 
@@ -359,7 +348,7 @@ export default function AdminCreateProductForm({
             value={formData.price}
             onChange={handleChange}
             required
-            className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+            className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
           />
         </label>
 
@@ -374,7 +363,7 @@ export default function AdminCreateProductForm({
             value={formData.stock}
             onChange={handleChange}
             required
-            className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+            className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
           />
         </label>
       </div>
@@ -391,10 +380,10 @@ export default function AdminCreateProductForm({
       <button
         disabled={isSubmitting || isUploadingImages}
         className="
-          rounded-full bg-black text-white
-          dark:bg-white dark:text-black
-          px-6 py-3 text-sm
+          rounded-full bg-black px-6 py-3
+          text-sm text-white
           disabled:opacity-50
+          dark:bg-white dark:text-black
         "
       >
         {isSubmitting ? "Creating..." : "Create product"}

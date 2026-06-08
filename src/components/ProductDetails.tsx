@@ -50,6 +50,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
           sm:p-6
           lg:grid-cols-[minmax(0,560px)_minmax(0,1fr)]
           lg:items-start
+          mt-8
         "
       >
         <div className="mx-auto w-full max-w-[560px] space-y-4 lg:mx-0">

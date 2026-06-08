@@ -51,7 +51,8 @@ export default function AdminProductsContent({
       !query ||
       product.name.pl.toLowerCase().includes(query) ||
       product.name.uk.toLowerCase().includes(query) ||
-      product.slug.toLowerCase().includes(query);
+      product.slug.toLowerCase().includes(query) ||
+      product.sku.toLowerCase().includes(query);
 
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
@@ -156,7 +157,7 @@ export default function AdminProductsContent({
           <input
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Search by name or slug"
+            placeholder="Search by name, slug or SKU"
             className="
               w-full rounded-full
               border border-gray-300

@@ -3,108 +3,112 @@ import type { Product } from "@/types/product";
 import { createProductSlug } from "@/lib/utils";
 
 type ProductRow = {
-  id: string;
-  slug: string;
-  name_pl: string;
-  name_uk: string;
-  description_pl: string;
-  description_uk: string;
-  price: number;
-  image_url: string;
-    image_urls: string[];
-  category: string;
-  stock: number;
-  is_available: boolean;
+    id: string;
+    slug: string;
+    sku: string | null;
+    name_pl: string;
+    name_uk: string;
+    description_pl: string;
+    description_uk: string;
+    price: number;
+    image_url: string | null;
+    image_urls: string[] | null;
+    category: string;
+    stock: number;
+    is_available: boolean;
 };
 
 function mapProductRowToProduct(product: ProductRow): Product {
-  return {
-    id: product.slug,
-    slug: product.slug,
-    name: {
-      pl: product.name_pl,
-      uk: product.name_uk,
-    },
-    description: {
-      pl: product.description_pl,
-      uk: product.description_uk,
-    },
-    price: Number(product.price),
-      images:
-          product.image_urls && product.image_urls.length > 0
-              ? product.image_urls
-              : product.image_url
-                  ? [product.image_url]
-                  : [],
-    category: product.category,
-    stock: product.stock,
-    isAvailable: product.is_available,
-  };
+    return {
+        id: product.slug,
+        slug: product.slug,
+        sku: product.sku ?? "",
+        name: {
+            pl: product.name_pl,
+            uk: product.name_uk,
+        },
+        description: {
+            pl: product.description_pl,
+            uk: product.description_uk,
+        },
+        price: Number(product.price),
+        images:
+            product.image_urls && product.image_urls.length > 0
+                ? product.image_urls
+                : product.image_url
+                    ? [product.image_url]
+                    : [],
+        category: product.category,
+        stock: product.stock,
+        isAvailable: product.is_available,
+    };
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: true });
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("is_available", { ascending: false })
+        .order("stock", { ascending: false })
+        .order("created_at", { ascending: true });
 
-  if (error) {
-    throw new Error(error.message);
-  }
+    if (error) {
+        throw new Error(error.message);
+    }
 
-  return (data as ProductRow[]).map(mapProductRowToProduct);
+    return (data as ProductRow[]).map(mapProductRowToProduct);
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("slug", slug)
+        .single();
 
-  if (error) {
-    return null;
-  }
+    if (error) {
+        return null;
+    }
 
-  return mapProductRowToProduct(data as ProductRow);
+    return mapProductRowToProduct(data as ProductRow);
 }
 
 export async function searchProducts({
-  query,
-  category,
+    query,
+    category,
 }: {
-  query?: string;
-  category?: string;
+    query?: string;
+    category?: string;
 }): Promise<Product[]> {
-  const normalizedQuery = query?.trim() ?? "";
+    const normalizedQuery = query?.trim() ?? "";
 
-  let request = supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: true });
+    let request = supabase.from("products").select("*");
 
-  if (normalizedQuery) {
-    request = request.or(
-      `name_pl.ilike.%${normalizedQuery}%,name_uk.ilike.%${normalizedQuery}%,description_pl.ilike.%${normalizedQuery}%,description_uk.ilike.%${normalizedQuery}%,category.ilike.%${normalizedQuery}%`
-    );
-  }
+    if (normalizedQuery) {
+        request = request.or(
+            `name_pl.ilike.%${normalizedQuery}%,name_uk.ilike.%${normalizedQuery}%,description_pl.ilike.%${normalizedQuery}%,description_uk.ilike.%${normalizedQuery}%,category.ilike.%${normalizedQuery}%`,
+        );
+    }
 
-  if (category && category !== "all") {
-    request = request.eq("category", category);
-  }
+    if (category && category !== "all") {
+        request = request.eq("category", category);
+    }
 
-  const { data, error } = await request;
+    const { data, error } = await request
+        .order("is_available", { ascending: false })
+        .order("stock", { ascending: false })
+        .order("created_at", { ascending: true });
 
-  if (error) {
-    throw new Error(error.message);
-  }
+    if (error) {
+        throw new Error(error.message);
+    }
 
-  return (data as ProductRow[]).map(mapProductRowToProduct);
+    return (data as ProductRow[]).map(mapProductRowToProduct);
 }
 
 export async function updateProductStock(
     productId: string,
-    stock: number
+    stock: number,
 ): Promise<void> {
     const { error } = await supabase
         .from("products")
@@ -121,7 +125,7 @@ export async function updateProductStock(
 
 export async function updateProductPrice(
     productId: string,
-    price: number
+    price: number,
 ): Promise<void> {
     const { error } = await supabase
         .from("products")
@@ -142,19 +146,27 @@ export type CreateProductInput = {
     description_pl: string;
     description_uk: string;
     price: number;
-    image_url: string;
-    image_urls: string[];
+    image_url?: string;
+    image_urls?: string[];
     category: string;
     stock: number;
     is_available: boolean;
 };
 
-export async function createProduct(product: CreateProductInput): Promise<void> {
-    const { error } = await supabase.from("products").insert(product);
+export async function createProduct(
+    product: CreateProductInput,
+): Promise<Product> {
+    const { data, error } = await supabase
+        .from("products")
+        .insert(product)
+        .select("*")
+        .single();
 
     if (error) {
         throw new Error(error.message);
     }
+
+    return mapProductRowToProduct(data as ProductRow);
 }
 
 export async function deleteProduct(productId: string): Promise<void> {
@@ -170,7 +182,7 @@ export async function deleteProduct(productId: string): Promise<void> {
 
 export async function updateProductAvailability(
     productId: string,
-    isAvailable: boolean
+    isAvailable: boolean,
 ): Promise<void> {
     const { error } = await supabase
         .from("products")
@@ -186,7 +198,7 @@ export async function updateProductAvailability(
 
 export async function updateProduct(
     slug: string,
-    product: Partial<CreateProductInput>
+    product: Partial<CreateProductInput>,
 ): Promise<void> {
     const { error } = await supabase
         .from("products")
@@ -219,7 +231,7 @@ export async function uploadProductImage(file: File): Promise<string> {
 }
 
 export async function generateUniqueSlug(
-    productName: string
+    productName: string,
 ): Promise<string> {
     const baseSlug = createProductSlug(productName);
 

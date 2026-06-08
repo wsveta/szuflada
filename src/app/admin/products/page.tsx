@@ -6,6 +6,7 @@ import AdminNav from "@/components/AdminNav";
 import AdminProductsContent from "@/components/AdminProductsContent";
 import { getProducts } from "@/lib/products";
 import { getCategories } from "@/lib/categories";
+import PageShell from "@/components/PageShell";
 
 export default async function AdminProductsPage() {
   const products = await getProducts();
@@ -13,18 +14,12 @@ export default async function AdminProductsPage() {
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
         <AdminNav />
-
         <AdminGuard>
           <AdminProductsContent products={products} categories={categories} />
         </AdminGuard>
-
-        <Footer />
-      </main>
+      </PageShell>
     </>
   );
 }

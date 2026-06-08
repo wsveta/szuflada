@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 import OrderDetailsContent from "@/components/OrderDetailsContent";
+import PageShell from "@/components/PageShell";
 
 type OrderPageProps = {
   params: Promise<{
@@ -14,13 +15,9 @@ export default async function OrderPage({ params }: OrderPageProps) {
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
         <OrderDetailsContent orderId={Number(id)} />
-        <Footer />
-      </main>
+      </PageShell>
     </>
   );
 }

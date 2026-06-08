@@ -1,5 +1,70 @@
 export const siteText = {
     pl: {
+        account: {
+            title: "Moje konto",
+
+            expand: "Rozwiń",
+            collapse: "Zwiń",
+
+            accountDetailsTitle: "Dane konta",
+            accountDetailsDescription: "Podstawowe informacje o Twoim koncie.",
+            email: "E-mail",
+            role: "Rola",
+            logout: "Wyloguj się",
+            loading: "Ładowanie...",
+            failed: "Nie udało się załadować konta.",
+            customer: "Klient",
+            admin: "Administrator",
+
+            ordersTitle: "Moje zamówienia",
+            ordersDescription: "Historia Twoich zamówień w sklepie.",
+
+            securityTitle: "Bezpieczeństwo konta",
+            securityDescription: "Zmień hasło lub adres e-mail przypisany do konta.",
+
+            passwordTitle: "Zmień hasło",
+            newPassword: "Nowe hasło",
+            confirmNewPassword: "Powtórz nowe hasło",
+            passwordHint:
+                "Hasło musi mieć minimum 8 znaków, co najmniej jedną literę i jedną cyfrę.",
+            passwordSubmit: "Zmień hasło",
+            passwordSubmitting: "Zapisywanie...",
+            passwordSuccess: "Hasło zostało zmienione.",
+            passwordFailed: "Nie udało się zmienić hasła.",
+
+            emailTitle: "Zmień e-mail",
+            newEmail: "Nowy adres e-mail",
+            emailSubmit: "Zmień e-mail",
+            emailSubmitting: "Wysyłanie...",
+            emailSuccess: "Sprawdź nowy adres e-mail i potwierdź zmianę.",
+            emailFailed: "Nie udało się zmienić adresu e-mail.",
+            emailRateLimit:
+                "Wysłano zbyt wiele wiadomości e-mail. Spróbuj ponownie później.",
+
+            checkoutTitle: "Dane dostawy",
+            checkoutDescription:
+                "Te dane zostaną automatycznie użyte przy kolejnym zamówieniu.",
+            firstName: "Imię",
+            lastName: "Nazwisko",
+            phone: "Telefon",
+            country: "Kraj",
+            city: "Miasto",
+            postalCode: "Kod pocztowy",
+            addressLine1: "Adres",
+            addressLine2: "Adres cd. / mieszkanie",
+            checkoutSubmit: "Zapisz dane dostawy",
+            checkoutSubmitting: "Zapisywanie...",
+            checkoutSuccess: "Dane dostawy zostały zapisane.",
+            checkoutFailed: "Nie udało się zapisać danych dostawy.",
+
+            invalidEmail: "Wpisz poprawny adres e-mail.",
+            sameEmail: "Nowy adres e-mail jest taki sam jak obecny.",
+            requiredFields: "Uzupełnij wszystkie wymagane pola.",
+            shortPassword: "Hasło musi mieć co najmniej 8 znaków.",
+            passwordNeedsLetter: "Hasło musi zawierać co najmniej jedną literę.",
+            passwordNeedsNumber: "Hasło musi zawierać co najmniej jedną cyfrę.",
+            passwordsDoNotMatch: "Hasła nie są takie same.",
+        },
         orders: {
             title: "Moje zamówienia",
             empty: "Nie masz jeszcze żadnych zamówień.",
@@ -173,6 +238,71 @@ export const siteText = {
     },
 
     uk: {
+        account: {
+            title: "Мій акаунт",
+
+            expand: "Розгорнути",
+            collapse: "Згорнути",
+
+            accountDetailsTitle: "Дані акаунту",
+            accountDetailsDescription: "Основна інформація про твій акаунт.",
+            email: "Електронна пошта",
+            role: "Роль",
+            logout: "Вийти",
+            loading: "Завантаження...",
+            failed: "Не вдалося завантажити акаунт.",
+            customer: "Клієнт",
+            admin: "Адміністратор",
+
+            ordersTitle: "Мої замовлення",
+            ordersDescription: "Історія твоїх замовлень у магазині.",
+
+            securityTitle: "Безпека акаунту",
+            securityDescription: "Зміни пароль або email, привʼязаний до акаунту.",
+
+            passwordTitle: "Змінити пароль",
+            newPassword: "Новий пароль",
+            confirmNewPassword: "Повтори новий пароль",
+            passwordHint:
+                "Пароль має містити мінімум 8 символів, щонайменше одну літеру й одну цифру.",
+            passwordSubmit: "Змінити пароль",
+            passwordSubmitting: "Збереження...",
+            passwordSuccess: "Пароль змінено.",
+            passwordFailed: "Не вдалося змінити пароль.",
+
+            emailTitle: "Змінити email",
+            newEmail: "Новий email",
+            emailSubmit: "Змінити email",
+            emailSubmitting: "Надсилання...",
+            emailSuccess: "Перевір нову пошту й підтверди зміну.",
+            emailFailed: "Не вдалося змінити email.",
+            emailRateLimit:
+                "Надіслано забагато email-листів. Спробуй ще раз пізніше.",
+
+            checkoutTitle: "Дані доставки",
+            checkoutDescription:
+                "Ці дані автоматично підставляться при наступному замовленні.",
+            firstName: "Імʼя",
+            lastName: "Прізвище",
+            phone: "Телефон",
+            country: "Країна",
+            city: "Місто",
+            postalCode: "Поштовий індекс",
+            addressLine1: "Адреса",
+            addressLine2: "Адреса додатково / квартира",
+            checkoutSubmit: "Зберегти дані доставки",
+            checkoutSubmitting: "Збереження...",
+            checkoutSuccess: "Дані доставки збережено.",
+            checkoutFailed: "Не вдалося зберегти дані доставки.",
+
+            invalidEmail: "Введи коректний email.",
+            sameEmail: "Новий email збігається з поточним.",
+            requiredFields: "Заповни всі обовʼязкові поля.",
+            shortPassword: "Пароль має містити щонайменше 8 символів.",
+            passwordNeedsLetter: "Пароль має містити щонайменше одну літеру.",
+            passwordNeedsNumber: "Пароль має містити щонайменше одну цифру.",
+            passwordsDoNotMatch: "Паролі не збігаються.",
+        },
         orders: {
             title: "Мої замовлення",
             empty: "У вас ще немає замовлень.",

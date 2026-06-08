@@ -5,6 +5,7 @@ import BackToShopLink from "@/components/BackToShopLink";
 import ProductDetails from "@/components/ProductDetails";
 import DemoBanner from "@/components/DemoBanner";
 import { getProductBySlug } from "@/lib/products";
+import PageShell from "@/components/PageShell";
 
 type ProductPageProps = {
   params: Promise<{
@@ -27,16 +28,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
           <BackToShopLink />
-            <ProductDetails product={product} />
+          <ProductDetails product={product} />
         </section>
-        <Footer />
-      </main>
+      </PageShell>
     </>
   );
 }

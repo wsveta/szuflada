@@ -4,6 +4,7 @@ import DemoBanner from "@/components/DemoBanner";
 import AdminGuard from "@/components/AdminGuard";
 import AdminOrderDetailsContent from "@/components/AdminOrderDetailsContent";
 import AdminNav from "@/components/AdminNav";
+import PageShell from "@/components/PageShell";
 
 type AdminOrderPageProps = {
   params: Promise<{
@@ -18,17 +19,12 @@ export default async function AdminOrderPage({
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
         <AdminNav />
         <AdminGuard>
           <AdminOrderDetailsContent orderId={Number(id)} />
         </AdminGuard>
-
-        <Footer />
-      </main>
+      </PageShell>
     </>
   );
 }

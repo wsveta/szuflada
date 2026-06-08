@@ -5,16 +5,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 import { useLanguage } from "@/context/LanguageContext";
+import PageShell from "@/components/PageShell";
 
 export default function SupportPage() {
   const { t } = useLanguage();
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
+        {" "}
         <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-20">
           <Link
             href="/"
@@ -69,9 +68,7 @@ export default function SupportPage() {
             {t.support.button}
           </Link>
         </section>
-      <Footer />
-      </main>
-
+      </PageShell>
     </>
   );
 }

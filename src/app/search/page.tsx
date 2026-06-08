@@ -4,6 +4,7 @@ import DemoBanner from "@/components/DemoBanner";
 import SearchResultsContent from "@/components/SearchResultsContent";
 import { searchProducts } from "@/lib/products";
 import { getCategories } from "@/lib/categories";
+import PageShell from "@/components/PageShell";
 
 type SearchPageProps = {
   searchParams: Promise<{
@@ -25,19 +26,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   return (
     <>
-      <DemoBanner />
-      <Header />
-
-      <main className="min-h-screen bg-white dark:bg-zinc-950">
+      <PageShell>
         <SearchResultsContent
           query={q}
           selectedCategory={category}
           products={products}
           categories={categories}
         />
-
-        <Footer />
-      </main>
+      </PageShell>
     </>
   );
 }

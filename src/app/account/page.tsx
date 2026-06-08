@@ -1,17 +1,14 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
-import { getProducts } from "@/lib/products";
-import FavoritesContent from "@/components/FavoritesContent";
+import AccountContent from "@/components/AccountContent";
 import PageShell from "@/components/PageShell";
 
-export default async function FavoritesPage() {
-  const products = await getProducts();
-
+export default function AccountPage() {
   return (
     <>
       <PageShell>
-        <FavoritesContent products={products} />
+        <AccountContent />
       </PageShell>
     </>
   );
