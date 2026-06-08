@@ -1,20 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import {
-  deleteProduct,
-  updateProductAvailability,
-  updateProductPrice,
-  updateProductStock,
-} from "@/lib/products";
+import { useCallback, useState } from "react";
+import { deleteProduct, updateProductAvailability } from "@/lib/products";
 import type { Category } from "@/lib/categories";
 import type { Product } from "@/types/product";
 import AdminCreateProductForm from "./AdminCreateProductForm";
+import AdminProductListItem from "./AdminProductListItem";
+import Toast from "@/components/Toast";
 
 type AdminProductsContentProps = {
   products: Product[];
   categories: Category[];
+};
+
+type AvailabilityFilter = "all" | "available" | "unavailable";
+
+type ToastState = {
+  type: "success" | "error";
+  title: string;
+  message?: string;
 };
 
 export default function AdminProductsContent({
@@ -22,46 +26,50 @@ export default function AdminProductsContent({
   categories,
 }: AdminProductsContentProps) {
   const [items, setItems] = useState(products);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [availabilityFilter, setAvailabilityFilter] =
+    useState<AvailabilityFilter>("all");
+  const [toast, setToast] = useState<ToastState | null>(null);
 
-  const handleStockChange = async (productId: string, stock: number) => {
-    const safeStock = Math.max(0, stock);
+  const closeToast = useCallback(() => {
+    setToast(null);
+  }, []);
 
-    setItems((currentItems) =>
-      currentItems.map((product) =>
-        product.id === productId
-          ? {
-              ...product,
-              stock: safeStock,
-              isAvailable: safeStock > 0,
-            }
-          : product,
-      ),
-    );
-
-    await updateProductStock(productId, safeStock);
+  const showErrorToast = (title: string, error: unknown) => {
+    setToast({
+      type: "error",
+      title,
+      message: error instanceof Error ? error.message : "Unknown error.",
+    });
   };
 
-  const handlePriceChange = async (productId: string, price: number) => {
-    const safePrice = Math.max(0, price);
+  const filteredItems = items.filter((product) => {
+    const query = searchQuery.trim().toLowerCase();
 
-    setItems((currentItems) =>
-      currentItems.map((product) =>
-        product.id === productId
-          ? {
-              ...product,
-              price: safePrice,
-            }
-          : product,
-      ),
-    );
+    const matchesSearch =
+      !query ||
+      product.name.pl.toLowerCase().includes(query) ||
+      product.name.uk.toLowerCase().includes(query) ||
+      product.slug.toLowerCase().includes(query);
 
-    await updateProductPrice(productId, safePrice);
-  };
+    const matchesCategory =
+      selectedCategory === "all" || product.category === selectedCategory;
+
+    const matchesAvailability =
+      availabilityFilter === "all" ||
+      (availabilityFilter === "available" && product.isAvailable) ||
+      (availabilityFilter === "unavailable" && !product.isAvailable);
+
+    return matchesSearch && matchesCategory && matchesAvailability;
+  });
 
   const handleAvailabilityChange = async (
     productId: string,
     isAvailable: boolean,
   ) => {
+    const previousItems = items;
+
     setItems((currentItems) =>
       currentItems.map((product) =>
         product.id === productId
@@ -73,26 +81,69 @@ export default function AdminProductsContent({
       ),
     );
 
-    await updateProductAvailability(productId, isAvailable);
+    try {
+      await updateProductAvailability(productId, isAvailable);
+    } catch (error) {
+      setItems(previousItems);
+      showErrorToast("Availability update failed.", error);
+    }
   };
 
   const handleDeleteProduct = async (productId: string) => {
-    const confirmed = window.confirm("Delete this product?");
+    const productToDelete = items.find((product) => product.id === productId);
+
+    if (!productToDelete) {
+      setToast({
+        type: "error",
+        title: "Product deletion failed.",
+        message: "Product not found.",
+      });
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete product "${productToDelete.name.pl}"?`,
+    );
 
     if (!confirmed) return;
+
+    const previousItems = items;
 
     setItems((currentItems) =>
       currentItems.filter((product) => product.id !== productId),
     );
 
-    await deleteProduct(productId);
+    try {
+      await deleteProduct(productId);
+
+      setToast({
+        type: "success",
+        title: `Product "${productToDelete.name.pl}" deleted successfully.`,
+      });
+    } catch (error) {
+      setItems(previousItems);
+      showErrorToast("Product deletion failed.", error);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    setAvailabilityFilter("all");
   };
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+      {toast && (
+        <Toast type={toast.type} title={toast.title} onClose={closeToast}>
+          {toast.message && <p>{toast.message}</p>}
+        </Toast>
+      )}
+
       <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
         Products
       </h1>
+
       <AdminCreateProductForm
         categories={categories}
         onProductCreated={(product) => {
@@ -100,106 +151,99 @@ export default function AdminProductsContent({
         }}
       />
 
-      <div className="mt-8 space-y-4">
-        {items.map((product) => (
-          <div
-            key={product.id}
+      <div className="mt-8 rounded-3xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-5">
+        <div className="grid gap-4 md:grid-cols-4">
+          <input
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Search by name or slug"
             className="
-              rounded-3xl
-              border border-gray-200
+              w-full rounded-full
+              border border-gray-300
               dark:border-zinc-700
-              bg-white
-              dark:bg-zinc-900
-              p-5
+              bg-white dark:bg-zinc-950
+              px-4 py-3 text-sm
+              text-gray-900 dark:text-white
+            "
+          />
+
+          <select
+            value={selectedCategory}
+            onChange={(event) => setSelectedCategory(event.target.value)}
+            className="
+              w-full rounded-full
+              border border-gray-300
+              dark:border-zinc-700
+              bg-white dark:bg-zinc-950
+              px-4 py-3 text-sm
+              text-gray-900 dark:text-white
             "
           >
-            <div className="flex flex-col gap-4">
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white">
-                  {product.name.pl}
-                </p>
+            <option value="all">All categories</option>
 
-                <p className="mt-1 text-sm text-gray-500 dark:text-zinc-400">
-                  ID: {product.id}
-                </p>
-              </div>
+            {categories.map((category) => (
+              <option key={category.id} value={category.slug}>
+                {category.name_pl}
+              </option>
+            ))}
+          </select>
 
-              <div className="flex flex-wrap gap-3 items-center">
-                <input
-                  type="number"
-                  min={0}
-                  step="0.01"
-                  value={product.price}
-                  onChange={(event) =>
-                    handlePriceChange(product.id, Number(event.target.value))
-                  }
-                  className="
-                    w-28 rounded-full
-                    border border-gray-300
-                    dark:border-zinc-700
-                    bg-white dark:bg-zinc-950
-                    px-4 py-2 text-sm
-                    text-gray-900 dark:text-white
-                  "
-                />
+          <select
+            value={availabilityFilter}
+            onChange={(event) =>
+              setAvailabilityFilter(event.target.value as AvailabilityFilter)
+            }
+            className="
+              w-full rounded-full
+              border border-gray-300
+              dark:border-zinc-700
+              bg-white dark:bg-zinc-950
+              px-4 py-3 text-sm
+              text-gray-900 dark:text-white
+            "
+          >
+            <option value="all">All products</option>
+            <option value="available">Available</option>
+            <option value="unavailable">Unavailable</option>
+          </select>
 
-                <input
-                  type="number"
-                  min={0}
-                  value={product.stock}
-                  onChange={(event) =>
-                    handleStockChange(product.id, Number(event.target.value))
-                  }
-                  className="
-                    w-28 rounded-full
-                    border border-gray-300
-                    dark:border-zinc-700
-                    bg-white dark:bg-zinc-950
-                    px-4 py-2 text-sm
-                    text-gray-900 dark:text-white
-                  "
-                />
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="
+              rounded-full
+              border border-gray-300
+              dark:border-zinc-700
+              px-4 py-3 text-sm
+              text-gray-700 dark:text-zinc-200
+              hover:bg-gray-100
+              dark:hover:bg-zinc-800
+            "
+          >
+            Reset filters
+          </button>
+        </div>
 
-                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-zinc-300">
-                  <input
-                    type="checkbox"
-                    checked={product.isAvailable}
-                    onChange={(event) =>
-                      handleAvailabilityChange(product.id, event.target.checked)
-                    }
-                  />
-                  Available
-                </label>
+        <p className="mt-4 text-sm text-gray-500 dark:text-zinc-400">
+          Showing {filteredItems.length} of {items.length} products
+        </p>
+      </div>
 
-                <button
-                  onClick={() => handleDeleteProduct(product.id)}
-                  className="
-                    rounded-full
-                    px-4 py-2 text-sm
-                    bg-red-600 text-white
-                    hover:bg-red-700
-                  "
-                >
-                  Delete
-                </button>
-                <Link
-                  href={`/admin/products/${product.slug}`}
-                  className="
-    rounded-full
-    border border-gray-300
-    dark:border-zinc-700
-    px-4 py-2 text-sm
-    text-gray-700 dark:text-zinc-200
-    hover:bg-gray-100
-    dark:hover:bg-zinc-800
-  "
-                >
-                  Edit
-                </Link>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="mt-8 space-y-4">
+        {filteredItems.length > 0 ? (
+          filteredItems.map((product) => (
+            <AdminProductListItem
+              key={product.id}
+              product={product}
+              onAvailabilityChange={handleAvailabilityChange}
+              onDelete={handleDeleteProduct}
+            />
+          ))
+        ) : (
+          <p className="rounded-3xl border border-dashed border-gray-300 dark:border-zinc-700 px-5 py-8 text-sm text-gray-500 dark:text-zinc-400">
+            No products found.
+          </p>
+        )}
       </div>
     </section>
   );

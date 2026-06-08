@@ -6,6 +6,7 @@ import {
   createCategory,
   deleteCategory,
   generateUniqueCategorySlug,
+  getCategoryProductCount,
   updateCategory,
   type Category,
 } from "@/lib/categories";
@@ -65,15 +66,9 @@ export default function AdminCategoriesContent({
         slug,
       };
 
-      await createCategory(categoryToCreate);
+      const createdCategory = await createCategory(categoryToCreate);
 
-      setItems((current) => [
-        ...current,
-        {
-          id: Date.now(),
-          ...categoryToCreate,
-        },
-      ]);
+      setItems((current) => [...current, createdCategory]);
 
       setNewCategory({
         name_pl: "",
@@ -165,21 +160,38 @@ export default function AdminCategoriesContent({
   };
 
   const handleDelete = async (categoryId: number) => {
-    const confirmed = window.confirm("Delete this category?");
+    const categoryToDelete = items.find((item) => item.id === categoryId);
 
-    if (!confirmed) return;
+    if (!categoryToDelete) {
+      showToast("Category not found.", "error");
+      return;
+    }
 
     try {
-      const categoryToDelete = items.find((item) => item.id === categoryId);
+      const productCount = await getCategoryProductCount(categoryToDelete.slug);
+
+      if (productCount > 0) {
+        showToast(
+          `Cannot delete "${categoryToDelete.name_pl}". This category is used by ${productCount} product${
+            productCount === 1 ? "" : "s"
+          }.`,
+          "error",
+        );
+        return;
+      }
+
+      const confirmed = window.confirm(
+        `Delete category "${categoryToDelete.name_pl}"?`,
+      );
+
+      if (!confirmed) return;
 
       await deleteCategory(categoryId);
 
       setItems((current) => current.filter((item) => item.id !== categoryId));
 
       showToast(
-        categoryToDelete
-          ? `Category "${categoryToDelete.name_pl}" deleted successfully.`
-          : "Category deleted successfully.",
+        `Category "${categoryToDelete.name_pl}" deleted successfully.`,
         "success",
       );
     } catch (error) {

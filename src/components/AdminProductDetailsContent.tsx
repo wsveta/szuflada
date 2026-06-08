@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { getProductBySlug, updateProduct } from "@/lib/products";
+import {
+  getProductBySlug,
+  updateProduct,
+  uploadProductImage,
+} from "@/lib/products";
 import type { Category } from "@/lib/categories";
+import Toast from "@/components/Toast";
 
 type ProductFormData = {
   name_pl: string;
@@ -22,13 +27,26 @@ type AdminProductDetailsContentProps = {
   categories: Category[];
 };
 
+type ToastState = {
+  type: "success" | "error";
+  title: string;
+  message?: string;
+  href?: string;
+  hrefLabel?: string;
+};
+
 export default function AdminProductDetailsContent({
   slug,
   categories,
 }: AdminProductDetailsContentProps) {
   const [formData, setFormData] = useState<ProductFormData | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const [message, setMessage] = useState("");
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [toast, setToast] = useState<ToastState | null>(null);
+
+  const closeToast = useCallback(() => {
+    setToast(null);
+  }, []);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -93,6 +111,49 @@ export default function AdminProductDetailsContent({
     });
   };
 
+  const handleImagesUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const files = Array.from(event.target.files ?? []);
+
+    if (files.length === 0) return;
+
+    setIsUploadingImages(true);
+
+    try {
+      const uploadedUrls = await Promise.all(
+        files.map((file) => uploadProductImage(file)),
+      );
+
+      setFormData((current) => {
+        if (!current) return current;
+
+        const currentImages = current.image_urls
+          .map((imageUrl) => imageUrl.trim())
+          .filter(Boolean);
+
+        return {
+          ...current,
+          image_urls: [...currentImages, ...uploadedUrls],
+        };
+      });
+
+      setToast({
+        type: "success",
+        title: "Images uploaded successfully.",
+      });
+    } catch (error) {
+      setToast({
+        type: "error",
+        title: "Image upload failed.",
+        message: error instanceof Error ? error.message : "Unknown error.",
+      });
+    } finally {
+      setIsUploadingImages(false);
+      event.target.value = "";
+    }
+  };
+
   const handleImageChange = (index: number, value: string) => {
     setFormData((current) => {
       if (!current) return current;
@@ -122,12 +183,13 @@ export default function AdminProductDetailsContent({
     setFormData((current) => {
       if (!current) return current;
 
+      const nextImages = current.image_urls.filter(
+        (_, imageIndex) => imageIndex !== index,
+      );
+
       return {
         ...current,
-        image_urls:
-          current.image_urls.length > 1
-            ? current.image_urls.filter((_, imageIndex) => imageIndex !== index)
-            : [""],
+        image_urls: nextImages.length > 0 ? nextImages : [""],
       };
     });
   };
@@ -137,23 +199,56 @@ export default function AdminProductDetailsContent({
 
     if (!formData) return;
 
-    setMessage("");
-    setIsSaving(true);
-
     const imageUrls = formData.image_urls
       .map((imageUrl) => imageUrl.trim())
       .filter(Boolean);
 
-    await updateProduct(slug, {
-      ...formData,
-      image_url: imageUrls[0] ?? "",
-      image_urls: imageUrls,
-      price: Math.max(0, formData.price),
-      stock: Math.max(0, formData.stock),
-    });
+    if (imageUrls.length === 0) {
+      setToast({
+        type: "error",
+        title: "Product update failed.",
+        message: "Add at least one product image.",
+      });
+      return;
+    }
 
-    setIsSaving(false);
-    setMessage("Product updated");
+    setIsSaving(true);
+
+    try {
+      await updateProduct(slug, {
+        ...formData,
+        image_url: imageUrls[0] ?? "",
+        image_urls: imageUrls,
+        price: Math.max(0, formData.price),
+        stock: Math.max(0, formData.stock),
+      });
+
+      setFormData((current) =>
+        current
+          ? {
+              ...current,
+              image_urls: imageUrls,
+              price: Math.max(0, current.price),
+              stock: Math.max(0, current.stock),
+            }
+          : current,
+      );
+
+      setToast({
+        type: "success",
+        title: "Product updated successfully.",
+        href: `/products/${slug}`,
+        hrefLabel: "Open product page",
+      });
+    } catch (error) {
+      setToast({
+        type: "error",
+        title: "Product update failed.",
+        message: error instanceof Error ? error.message : "Unknown error.",
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!formData) {
@@ -166,6 +261,22 @@ export default function AdminProductDetailsContent({
 
   return (
     <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      {toast && (
+        <Toast type={toast.type} title={toast.title} onClose={closeToast}>
+          {toast.message && <p>{toast.message}</p>}
+
+          {toast.href && toast.hrefLabel && (
+            <Link
+              href={toast.href}
+              target="_blank"
+              className="inline-block font-medium underline"
+            >
+              {toast.hrefLabel}
+            </Link>
+          )}
+        </Toast>
+      )}
+
       <Link
         href="/admin/products"
         className="text-sm text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white"
@@ -222,39 +333,107 @@ export default function AdminProductDetailsContent({
           />
         </div>
 
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
-            Product images
-          </p>
+        <div className="space-y-4">
+          <div>
+            <p className="text-sm font-medium text-gray-900 dark:text-white">
+              Product images
+            </p>
 
-          {formData.image_urls.map((imageUrl, index) => (
-            <div key={index} className="flex gap-3">
-              <input
-                value={imageUrl}
-                onChange={(event) =>
-                  handleImageChange(index, event.target.value)
-                }
-                placeholder={`Image URL ${index + 1}`}
-                className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
-              />
+            <p className="mt-1 text-xs text-gray-500 dark:text-zinc-400">
+              Upload new images or manage existing product images.
+            </p>
+          </div>
+
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImagesUpload}
+            disabled={isUploadingImages}
+            className="block w-full text-sm text-gray-700 dark:text-zinc-300"
+          />
+
+          {isUploadingImages && (
+            <p className="text-sm text-gray-500 dark:text-zinc-400">
+              Uploading images...
+            </p>
+          )}
+
+          {formData.image_urls.filter(Boolean).length > 0 ? (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {formData.image_urls.map((imageUrl, index) => {
+                if (!imageUrl) return null;
+
+                return (
+                  <div
+                    key={`${imageUrl}-${index}`}
+                    className="rounded-3xl border border-gray-200 dark:border-zinc-700 p-3"
+                  >
+                    <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-800">
+                      <img
+                        src={imageUrl}
+                        alt=""
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+
+                    <p className="mt-3 truncate text-xs text-gray-500 dark:text-zinc-400">
+                      {imageUrl}
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="mt-3 rounded-full bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="rounded-2xl border border-dashed border-gray-300 dark:border-zinc-700 px-4 py-6 text-sm text-gray-500 dark:text-zinc-400">
+              No images added yet.
+            </p>
+          )}
+
+          <details className="rounded-2xl border border-gray-200 dark:border-zinc-700 p-4">
+            <summary className="cursor-pointer text-sm font-medium text-gray-900 dark:text-white">
+              Add image by URL
+            </summary>
+
+            <div className="mt-4 space-y-3">
+              {formData.image_urls.map((imageUrl, index) => (
+                <div key={index} className="flex gap-3">
+                  <input
+                    value={imageUrl}
+                    onChange={(event) =>
+                      handleImageChange(index, event.target.value)
+                    }
+                    placeholder={`Image URL ${index + 1}`}
+                    className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="rounded-full bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
 
               <button
                 type="button"
-                onClick={() => handleRemoveImage(index)}
-                className="rounded-full bg-red-600 text-white px-4 py-2 text-sm hover:bg-red-700"
+                onClick={handleAddImage}
+                className="rounded-full border border-gray-300 dark:border-zinc-700 px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800"
               >
-                Remove
+                Add URL field
               </button>
             </div>
-          ))}
-
-          <button
-            type="button"
-            onClick={handleAddImage}
-            className="rounded-full border border-gray-300 dark:border-zinc-700 px-4 py-2 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800"
-          >
-            Add image
-          </button>
+          </details>
         </div>
 
         <div>
@@ -321,14 +500,8 @@ export default function AdminProductDetailsContent({
           Available
         </label>
 
-        {message && (
-          <p className="text-sm text-green-700 dark:text-green-400">
-            {message}
-          </p>
-        )}
-
         <button
-          disabled={isSaving}
+          disabled={isSaving || isUploadingImages}
           className="
             rounded-full bg-black text-white
             dark:bg-white dark:text-black

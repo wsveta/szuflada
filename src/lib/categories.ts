@@ -21,12 +21,18 @@ export async function getCategories(): Promise<Category[]> {
     return data as Category[];
 }
 
-export async function createCategory(category: Omit<Category, "id">) {
-    const { error } = await supabase.from("categories").insert(category);
+export async function createCategory(
+    category: Omit<Category, "id">,
+): Promise<Category> {
+    const { data, error } = await supabase
+        .from("categories")
+        .insert(category)
+        .select("id, slug, name_pl, name_uk")
+        .single();
 
-    if (error) {
-        throw new Error(error.message);
-    }
+    if (error) throw new Error(error.message);
+
+    return data as Category;
 }
 
 export async function updateCategory(
@@ -102,4 +108,20 @@ export async function generateUniqueCategorySlug(
         slug = `${baseSlug}-${counter}`;
         counter++;
     }
+}
+
+export async function getCategoryProductCount(
+    categorySlug: string,
+): Promise<number> {
+    const { count, error } = await supabase
+        .from("products")
+        .select("id", {
+            count: "exact",
+            head: true,
+        })
+        .eq("category", categorySlug);
+
+    if (error) throw new Error(error.message);
+
+    return count ?? 0;
 }
