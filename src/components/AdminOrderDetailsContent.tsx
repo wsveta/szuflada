@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getAdminOrderById } from "@/lib/orders";
+import { getAdminOrderById, updateOrderStatus } from "@/lib/orders";
+
+const statuses = ["pending", "paid", "shipped", "delivered", "cancelled"];
 
 export default function AdminOrderDetailsContent({
   orderId,
@@ -20,10 +22,21 @@ export default function AdminOrderDetailsContent({
     loadOrder();
   }, [orderId]);
 
+  const handleStatusChange = async (status: string) => {
+    if (!order) return;
+
+    await updateOrderStatus(order.id, status);
+
+    setOrder({
+      ...order,
+      status,
+    });
+  };
+
   if (!order) {
     return (
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <p>Loading...</p>
+        <p className="text-gray-500 dark:text-zinc-400">Loading...</p>
       </section>
     );
   }
@@ -37,28 +50,93 @@ export default function AdminOrderDetailsContent({
         ← Back to orders
       </Link>
 
-      <h1 className="mt-8 text-3xl font-bold text-gray-900 dark:text-white">
-        Order #{order.id}
-      </h1>
+      <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          Order #{order.id}
+        </h1>
 
-      <div className="mt-8 rounded-3xl bg-gray-100 dark:bg-zinc-900 p-6">
-        <p>Email: {order.email}</p>
+        <span className="w-fit rounded-full bg-gray-100 dark:bg-zinc-900 px-4 py-2 text-sm text-gray-700 dark:text-zinc-200">
+          {order.status}
+        </span>
+      </div>
 
-        <p className="mt-2">
-          {order.first_name} {order.last_name}
-        </p>
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="rounded-3xl bg-gray-100 dark:bg-zinc-900 p-6 text-gray-700 dark:text-zinc-200">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Customer
+          </h2>
 
-        <p className="mt-2">{order.phone}</p>
+          <p className="mt-4">Email: {order.email}</p>
 
-        <p className="mt-4">
-          {order.country}, {order.city}
-        </p>
+          <p className="mt-2">
+            Name: {order.first_name} {order.last_name}
+          </p>
 
-        <p>{order.address_line_1}</p>
+          {order.phone && <p className="mt-2">Phone: {order.phone}</p>}
+        </div>
 
-        {order.address_line_2 && (
-          <p>{order.address_line_2}</p>
-        )}
+        <div className="rounded-3xl bg-gray-100 dark:bg-zinc-900 p-6 text-gray-700 dark:text-zinc-200">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Delivery address
+          </h2>
+
+          <p className="mt-4">
+            {order.country}, {order.city}, {order.postal_code}
+          </p>
+
+          <p className="mt-2">{order.address_line_1}</p>
+
+          {order.address_line_2 && (
+            <p className="mt-2">{order.address_line_2}</p>
+          )}
+        </div>
+
+        <div className="rounded-3xl bg-gray-100 dark:bg-zinc-900 p-6 text-gray-700 dark:text-zinc-200">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Order info
+          </h2>
+
+          <p className="mt-4">
+            Delivery method: {order.delivery_method}
+          </p>
+
+          <p className="mt-2">
+            Payment method: {order.payment_method}
+          </p>
+
+          <p className="mt-2">
+            Total: {Number(order.total_amount).toFixed(2)} zł
+          </p>
+
+          <p className="mt-2">
+            Date: {new Date(order.created_at).toLocaleDateString()}
+          </p>
+        </div>
+
+        <div className="rounded-3xl bg-gray-100 dark:bg-zinc-900 p-6 text-gray-700 dark:text-zinc-200">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            Change status
+          </h2>
+
+          <select
+            value={order.status}
+            onChange={(event) => handleStatusChange(event.target.value)}
+            className="
+              mt-4 w-full rounded-full
+              border border-gray-300
+              dark:border-zinc-700
+              bg-white dark:bg-zinc-950
+              px-4 py-3 text-sm
+              text-gray-900 dark:text-white
+            "
+          >
+            {statuses.map((status) => (
+              <option key={status} value={status}>
+                {status}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <h2 className="mt-10 text-2xl font-bold text-gray-900 dark:text-white">
@@ -75,18 +153,20 @@ export default function AdminOrderDetailsContent({
               dark:border-zinc-700
               bg-white dark:bg-zinc-900
               p-4
+              text-gray-700 dark:text-zinc-200
             "
           >
-            <p className="font-medium">
+            <p className="font-medium text-gray-900 dark:text-white">
               {item.product_name}
             </p>
 
-            <p className="mt-2">
-              Qty: {item.quantity}
-            </p>
+            <p className="mt-2">Qty: {item.quantity}</p>
+
+            <p>Price: {Number(item.unit_price).toFixed(2)} zł</p>
 
             <p>
-              Price: {Number(item.unit_price).toFixed(2)} zł
+              Subtotal:{" "}
+              {(Number(item.unit_price) * item.quantity).toFixed(2)} zł
             </p>
           </div>
         ))}

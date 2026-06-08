@@ -50,9 +50,7 @@ export default function CartContent({ products }: CartContentProps) {
       </h1>
 
       {cartProducts.length === 0 ? (
-        <p className="mt-6 text-gray-500 dark:text-zinc-400">
-          {t.cart.empty}
-        </p>
+        <p className="mt-6 text-gray-500 dark:text-zinc-400">{t.cart.empty}</p>
       ) : (
         <div className="mt-10 grid lg:grid-cols-[1fr_360px] gap-10">
           <div className="space-y-4">
@@ -66,7 +64,7 @@ export default function CartContent({ products }: CartContentProps) {
                   className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-gray-100 dark:bg-zinc-800"
                 >
                   <Image
-                    src={product.image}
+                    src={product.images[0] ?? "/products/placeholder.png"}
                     alt={product.name[language]}
                     fill
                     sizes="96px"
@@ -152,9 +150,9 @@ export default function CartContent({ products }: CartContentProps) {
                 <span>{totalPrice.toFixed(2)} zł</span>
               </div>
             </div>
-<Link
-  href="/checkout"
-  className="
+            <Link
+              href="/checkout"
+              className="
     mt-6 flex w-full justify-center rounded-full
     bg-black text-white
     dark:bg-white dark:text-black
@@ -163,15 +161,15 @@ export default function CartContent({ products }: CartContentProps) {
     hover:bg-zinc-800
     dark:hover:bg-zinc-200
   "
->
-  {t.checkout.goToCheckout}
-</Link>
+            >
+              {t.checkout.goToCheckout}
+            </Link>
             <button
-  onClick={clearCart}
-  className="mt-3 w-full rounded-full border border-gray-300 dark:border-zinc-700 py-3 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-800"
->
-  {t.cart.clear}
-</button>
+              onClick={clearCart}
+              className="mt-3 w-full rounded-full border border-gray-300 dark:border-zinc-700 py-3 text-sm text-gray-700 dark:text-zinc-200 hover:bg-gray-200 dark:hover:bg-zinc-800"
+            >
+              {t.cart.clear}
+            </button>
           </aside>
         </div>
       )}

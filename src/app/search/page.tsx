@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 import SearchResultsContent from "@/components/SearchResultsContent";
 import { searchProducts } from "@/lib/products";
+import { getCategories } from "@/lib/categories";
 
 type SearchPageProps = {
   searchParams: Promise<{
@@ -14,10 +15,13 @@ type SearchPageProps = {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const { q = "", category = "all" } = await searchParams;
 
-  const products = await searchProducts({
-    query: q,
-    category,
-  });
+  const [products, categories] = await Promise.all([
+    searchProducts({
+      query: q,
+      category,
+    }),
+    getCategories(),
+  ]);
 
   return (
     <>
@@ -29,6 +33,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           query={q}
           selectedCategory={category}
           products={products}
+          categories={categories}
         />
 
         <Footer />

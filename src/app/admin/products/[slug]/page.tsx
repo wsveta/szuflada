@@ -2,19 +2,21 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DemoBanner from "@/components/DemoBanner";
 import AdminGuard from "@/components/AdminGuard";
-import AdminOrderDetailsContent from "@/components/AdminOrderDetailsContent";
 import AdminNav from "@/components/AdminNav";
+import AdminProductDetailsContent from "@/components/AdminProductDetailsContent";
+import { getCategories } from "@/lib/categories";
 
-type AdminOrderPageProps = {
+type AdminProductPageProps = {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 };
 
-export default async function AdminOrderPage({
+export default async function AdminProductPage({
   params,
-}: AdminOrderPageProps) {
-  const { id } = await params;
+}: AdminProductPageProps) {
+  const { slug } = await params;
+  const categories = await getCategories();
 
   return (
     <>
@@ -23,8 +25,9 @@ export default async function AdminOrderPage({
 
       <main className="min-h-screen bg-white dark:bg-zinc-950">
         <AdminNav />
+
         <AdminGuard>
-          <AdminOrderDetailsContent orderId={Number(id)} />
+          <AdminProductDetailsContent slug={slug} categories={categories} />
         </AdminGuard>
 
         <Footer />

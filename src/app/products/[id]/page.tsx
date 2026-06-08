@@ -37,7 +37,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <div className="mt-8 grid lg:grid-cols-2 gap-8 lg:gap-12">
             <div className="relative aspect-square rounded-3xl overflow-hidden bg-gray-100 dark:bg-zinc-900">
               <Image
-                src={product.image}
+                src={product.images[0] ?? "/products/placeholder.png"}
                 alt="Product image"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

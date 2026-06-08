@@ -6,19 +6,22 @@ import { useRouter } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { useLanguage } from "@/context/LanguageContext";
 import type { Product } from "@/types/product";
+import type { Category } from "@/lib/categories";
 
 type SearchResultsContentProps = {
   query: string;
   selectedCategory: string;
   products: Product[];
+  categories: Category[];
 };
 
 export default function SearchResultsContent({
   query,
   selectedCategory,
   products,
+  categories,
 }: SearchResultsContentProps) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const router = useRouter();
 
   const [searchValue, setSearchValue] = useState(query);
@@ -47,11 +50,12 @@ export default function SearchResultsContent({
     return () => clearTimeout(timer);
   }, [searchValue, selectedCategory, router]);
 
-  const categories = [
+  const categoryFilters = [
     { id: "all", label: t.categories.all },
-    { id: "bags", label: t.categories.bags },
-    { id: "notepads", label: t.categories.notepads },
-    { id: "kitchen", label: t.categories.kitchen },
+    ...categories.map((category) => ({
+      id: category.slug,
+      label: language === "pl" ? category.name_pl : category.name_uk,
+    })),
   ];
 
   const getCategoryHref = (categoryId: string) => {
@@ -98,7 +102,7 @@ export default function SearchResultsContent({
       </p>
 
       <div className="mt-8 flex flex-wrap gap-3">
-        {categories.map((category) => (
+        {categoryFilters.map((category) => (
           <Link
             key={category.id}
             href={getCategoryHref(category.id)}
