@@ -119,8 +119,12 @@ export default function SearchResultsContent({
 
       {products.length > 0 && (
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              isAboveTheFold={index < 4}
+            />
           ))}
         </div>
       )}

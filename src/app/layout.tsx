@@ -17,15 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl">
-      <body>
+    <html lang="pl" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>
             <AuthProvider>
               <FavoritesProvider>
-                <CartProvider>
-                  {children}
-                </CartProvider>
+                <CartProvider>{children}</CartProvider>
               </FavoritesProvider>
             </AuthProvider>
           </LanguageProvider>

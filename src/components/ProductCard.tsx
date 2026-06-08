@@ -8,18 +8,22 @@ import { useLanguage } from "@/context/LanguageContext";
 
 type ProductCardProps = {
   product: Product;
+  isAboveTheFold?: boolean;
 };
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  isAboveTheFold = false,
+}: ProductCardProps) {
   const { language } = useLanguage();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const productName = language === "pl" ? product.name.pl : product.name.uk;
-
   const images = product.images.filter(Boolean);
   const activeImage = images[activeImageIndex];
-
   const hasMultipleImages = images.length > 1;
+
+  const isRemoteImage = activeImage?.startsWith("https://");
 
   const handlePreviousImage = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -46,6 +50,9 @@ export default function ProductCard({ product }: ProductCardProps) {
               src={activeImage}
               alt={productName}
               fill
+              unoptimized={isRemoteImage}
+              loading={isAboveTheFold ? "eager" : "lazy"}
+              fetchPriority={isAboveTheFold ? "high" : "auto"}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
@@ -60,13 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               <button
                 type="button"
                 onClick={handlePreviousImage}
-                className="
-                  absolute left-3 top-1/2 -translate-y-1/2
-                  flex h-8 w-8 items-center justify-center
-                  rounded-full bg-white/80 text-gray-900
-                  shadow-sm backdrop-blur
-                  hover:bg-white
-                "
+                className="absolute left-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-900 shadow-sm backdrop-blur hover:bg-white"
                 aria-label="Previous image"
               >
                 ←
@@ -75,13 +76,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               <button
                 type="button"
                 onClick={handleNextImage}
-                className="
-                  absolute right-3 top-1/2 -translate-y-1/2
-                  flex h-8 w-8 items-center justify-center
-                  rounded-full bg-white/80 text-gray-900
-                  shadow-sm backdrop-blur
-                  hover:bg-white
-                "
+                className="absolute right-3 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-white/80 text-gray-900 shadow-sm backdrop-blur hover:bg-white"
                 aria-label="Next image"
               >
                 →
@@ -90,20 +85,17 @@ export default function ProductCard({ product }: ProductCardProps) {
               <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
                 {images.map((image, index) => (
                   <button
-                    key={image}
+                    key={`${image}-${index}`}
                     type="button"
                     onClick={(event) => {
                       event.preventDefault();
                       setActiveImageIndex(index);
                     }}
-                    className={`
-                      h-2 rounded-full transition-all
-                      ${
-                        activeImageIndex === index
-                          ? "w-5 bg-white"
-                          : "w-2 bg-white/60"
-                      }
-                    `}
+                    className={`h-2 rounded-full transition-all ${
+                      activeImageIndex === index
+                        ? "w-5 bg-white"
+                        : "w-2 bg-white/60"
+                    }`}
                     aria-label={`Show image ${index + 1}`}
                   />
                 ))}

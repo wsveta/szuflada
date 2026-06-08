@@ -35,6 +35,7 @@ export default function AdminProductListItem({
               src={mainImage}
               alt={product.name.pl}
               fill
+              unoptimized
               sizes="112px"
               className="object-cover"
             />

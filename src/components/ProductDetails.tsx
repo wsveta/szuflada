@@ -41,7 +41,9 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
               src={activeImage}
               alt={productName}
               fill
-              priority
+              unoptimized={activeImage.startsWith("https://")}
+              loading="eager"
+              fetchPriority="high"
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
             />
@@ -108,6 +110,7 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
                   src={imageUrl}
                   alt={`${productName} ${index + 1}`}
                   fill
+                  unoptimized
                   sizes="120px"
                   className="object-cover"
                 />
