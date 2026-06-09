@@ -1,6 +1,3 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import DemoBanner from "@/components/DemoBanner";
 import RegisterForm from "@/components/RegisterForm";
 import PageShell from "@/components/PageShell";
 

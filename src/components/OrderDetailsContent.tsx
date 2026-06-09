@@ -63,7 +63,7 @@ export default function OrderDetailsContent({
         href="/account"
         className="text-sm text-gray-500 hover:text-black dark:text-zinc-400 dark:hover:text-white"
       >
-        ← {t.auth.profile}
+        ← {t.account.title}
       </Link>
 
       <h1 className="mt-8 text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">

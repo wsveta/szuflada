@@ -1,9 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import DemoBanner from "@/components/DemoBanner";
 import { useLanguage } from "@/context/LanguageContext";
 import PageShell from "@/components/PageShell";
 

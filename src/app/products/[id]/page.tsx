@@ -1,9 +1,5 @@
-import Image from "next/image";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import BackToShopLink from "@/components/BackToShopLink";
 import ProductDetails from "@/components/ProductDetails";
-import DemoBanner from "@/components/DemoBanner";
 import { getProductBySlug } from "@/lib/products";
 import PageShell from "@/components/PageShell";
 

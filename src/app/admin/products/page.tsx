@@ -1,6 +1,3 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import DemoBanner from "@/components/DemoBanner";
 import AdminGuard from "@/components/AdminGuard";
 import AdminNav from "@/components/AdminNav";
 import AdminProductsContent from "@/components/AdminProductsContent";

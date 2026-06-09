@@ -1,9 +1,6 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import DemoBanner from "@/components/DemoBanner";
 import AdminGuard from "@/components/AdminGuard";
-import AdminOrderDetailsContent from "@/components/AdminOrderDetailsContent";
 import AdminNav from "@/components/AdminNav";
+import AdminOrderDetailsContent from "@/components/AdminOrderDetailsContent";
 import PageShell from "@/components/PageShell";
 
 type AdminOrderPageProps = {

@@ -1,6 +1,3 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import DemoBanner from "@/components/DemoBanner";
 import SearchResultsContent from "@/components/SearchResultsContent";
 import { searchProducts } from "@/lib/products";
 import { getCategories } from "@/lib/categories";
