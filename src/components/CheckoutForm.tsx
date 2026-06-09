@@ -231,7 +231,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
         total_amount: totalAmount,
         status: "pending",
       })
-      .select("id")
+      .select("id, order_code")
       .single();
 
     if (orderError || !order) {
@@ -261,7 +261,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
     await clearCart();
 
     setIsSubmitting(false);
-    router.push(`/order-success?order=${order.id}`);
+    router.push(`/order-success?order=${order.order_code}`);
   };
 
   return (

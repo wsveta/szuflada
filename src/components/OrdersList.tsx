@@ -1,14 +1,14 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { getUserOrders, type Order } from "@/lib/orders";
 
 export default function OrdersList() {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +16,7 @@ export default function OrdersList() {
   useEffect(() => {
     const loadOrders = async () => {
       if (!user) {
+        setOrders([]);
         setIsLoading(false);
         return;
       }
@@ -32,6 +33,8 @@ export default function OrdersList() {
 
     loadOrders();
   }, [user]);
+
+  const dateLocale = language === "pl" ? "pl-PL" : "uk-UA";
 
   if (isLoading) {
     return (
@@ -68,15 +71,15 @@ export default function OrdersList() {
             className="
               rounded-3xl
               border border-gray-200
-              dark:border-zinc-700
               bg-white
-              dark:bg-zinc-900
               p-5
+              dark:border-zinc-700
+              dark:bg-zinc-900
             "
           >
             <div className="flex flex-col gap-2">
               <p className="font-semibold text-gray-900 dark:text-white">
-                {t.orders.orderNumber} #{order.id}
+                {t.orders.orderNumber}: {order.order_code}
               </p>
 
               <p className="text-sm text-gray-500 dark:text-zinc-400">
@@ -89,15 +92,16 @@ export default function OrdersList() {
 
               <p className="text-sm text-gray-500 dark:text-zinc-400">
                 {t.orders.createdAt}:{" "}
-                {new Date(order.created_at).toLocaleDateString()}
+                {new Date(order.created_at).toLocaleDateString(dateLocale)}
               </p>
             </div>
-            <a
-  href={`/profile/orders/${order.id}`}
-  className="mt-3 inline-flex text-sm text-gray-900 dark:text-white underline"
->
-  {t.orders.viewOrder}
-</a>
+
+            <Link
+              href={`/profile/orders/${encodeURIComponent(order.order_code)}`}
+              className="mt-3 inline-flex text-sm text-gray-900 underline dark:text-white"
+            >
+              {t.orders.viewOrder}
+            </Link>
           </div>
         ))}
       </div>

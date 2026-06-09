@@ -9,12 +9,11 @@ type OrderPageProps = {
 
 export default async function OrderPage({ params }: OrderPageProps) {
   const { id } = await params;
+  const orderCode = decodeURIComponent(id);
 
   return (
-    <>
-      <PageShell>
-        <OrderDetailsContent orderId={Number(id)} />
-      </PageShell>
-    </>
+    <PageShell>
+      <OrderDetailsContent orderCode={orderCode} />
+    </PageShell>
   );
 }
