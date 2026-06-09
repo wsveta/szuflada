@@ -21,6 +21,11 @@ type ToastState = {
   message?: string;
 };
 
+const normalizeText = (value: string) => value.trim().toLowerCase();
+
+const normalizeSku = (value: string) =>
+  value.replace(/[\s-]/g, "").toLowerCase();
+
 export default function AdminProductsContent({
   products,
   categories,
@@ -45,14 +50,24 @@ export default function AdminProductsContent({
   };
 
   const filteredItems = items.filter((product) => {
-    const query = searchQuery.trim().toLowerCase();
+    const query = normalizeText(searchQuery);
+    const skuQuery = normalizeSku(searchQuery);
+    const productSku = product.sku ?? "";
+
+    const searchableText = [
+      product.name.pl,
+      product.name.uk,
+      product.slug,
+      product.category,
+      productSku,
+    ]
+      .join(" ")
+      .toLowerCase();
 
     const matchesSearch =
       !query ||
-      product.name.pl.toLowerCase().includes(query) ||
-      product.name.uk.toLowerCase().includes(query) ||
-      product.slug.toLowerCase().includes(query) ||
-      product.sku.toLowerCase().includes(query);
+      searchableText.includes(query) ||
+      normalizeSku(productSku).includes(skuQuery);
 
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
@@ -61,7 +76,6 @@ export default function AdminProductsContent({
       availabilityFilter === "all" ||
       (availabilityFilter === "available" && product.isAvailable) ||
       (availabilityFilter === "unavailable" && !product.isAvailable);
-
     return matchesSearch && matchesCategory && matchesAvailability;
   });
 
@@ -134,14 +148,14 @@ export default function AdminProductsContent({
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:py-16">
       {toast && (
         <Toast type={toast.type} title={toast.title} onClose={closeToast}>
           {toast.message && <p>{toast.message}</p>}
         </Toast>
       )}
 
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
         Products
       </h1>
 
@@ -152,7 +166,7 @@ export default function AdminProductsContent({
         }}
       />
 
-      <div className="mt-8 rounded-3xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-5">
+      <div className="mt-8 rounded-3xl border border-gray-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900">
         <div className="grid gap-4 md:grid-cols-4">
           <input
             value={searchQuery}
@@ -161,10 +175,9 @@ export default function AdminProductsContent({
             className="
               w-full rounded-full
               border border-gray-300
-              dark:border-zinc-700
-              bg-white dark:bg-zinc-950
-              px-4 py-3 text-sm
-              text-gray-900 dark:text-white
+              bg-white px-4 py-3
+              text-sm text-gray-900
+              dark:border-zinc-700 dark:bg-zinc-950 dark:text-white
             "
           />
 
@@ -174,10 +187,9 @@ export default function AdminProductsContent({
             className="
               w-full rounded-full
               border border-gray-300
-              dark:border-zinc-700
-              bg-white dark:bg-zinc-950
-              px-4 py-3 text-sm
-              text-gray-900 dark:text-white
+              bg-white px-4 py-3
+              text-sm text-gray-900
+              dark:border-zinc-700 dark:bg-zinc-950 dark:text-white
             "
           >
             <option value="all">All categories</option>
@@ -197,10 +209,9 @@ export default function AdminProductsContent({
             className="
               w-full rounded-full
               border border-gray-300
-              dark:border-zinc-700
-              bg-white dark:bg-zinc-950
-              px-4 py-3 text-sm
-              text-gray-900 dark:text-white
+              bg-white px-4 py-3
+              text-sm text-gray-900
+              dark:border-zinc-700 dark:bg-zinc-950 dark:text-white
             "
           >
             <option value="all">All products</option>
@@ -214,11 +225,10 @@ export default function AdminProductsContent({
             className="
               rounded-full
               border border-gray-300
-              dark:border-zinc-700
               px-4 py-3 text-sm
-              text-gray-700 dark:text-zinc-200
+              text-gray-700
               hover:bg-gray-100
-              dark:hover:bg-zinc-800
+              dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800
             "
           >
             Reset filters
@@ -241,7 +251,7 @@ export default function AdminProductsContent({
             />
           ))
         ) : (
-          <p className="rounded-3xl border border-dashed border-gray-300 dark:border-zinc-700 px-5 py-8 text-sm text-gray-500 dark:text-zinc-400">
+          <p className="rounded-3xl border border-dashed border-gray-300 px-5 py-8 text-sm text-gray-500 dark:border-zinc-700 dark:text-zinc-400">
             No products found.
           </p>
         )}

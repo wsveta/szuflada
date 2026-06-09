@@ -55,7 +55,6 @@ export async function getProducts(): Promise<Product[]> {
     if (error) {
         throw new Error(error.message);
     }
-
     return (data as ProductRow[]).map(mapProductRowToProduct);
 }
 
