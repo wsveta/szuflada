@@ -17,46 +17,21 @@ export default function RegisterForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const validationMessages = {
-    invalidEmail:
-      language === "pl"
-        ? "Wpisz poprawny adres e-mail."
-        : "Введи коректну електронну пошту.",
-    shortPassword:
-      language === "pl"
-        ? "Hasło musi mieć co najmniej 8 znaków."
-        : "Пароль має містити щонайменше 8 символів.",
-    passwordNeedsLetter:
-      language === "pl"
-        ? "Hasło musi zawierać co najmniej jedną literę."
-        : "Пароль має містити щонайменше одну літеру.",
-    passwordNeedsNumber:
-      language === "pl"
-        ? "Hasło musi zawierać co najmniej jedną cyfrę."
-        : "Пароль має містити щонайменше одну цифру.",
-    passwordsDoNotMatch:
-      language === "pl" ? "Hasła nie są takie same." : "Паролі не збігаються.",
-    googleAuthFailed:
-      language === "pl"
-        ? "Logowanie przez Google nie powiodło się."
-        : "Не вдалося увійти через Google.",
-  };
-
   const validateEmail = (value: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   };
 
   const validatePassword = (value: string) => {
     if (value.length < 8) {
-      return validationMessages.shortPassword;
+      return t.auth.shortPassword;
     }
 
     if (!/\p{L}/u.test(value)) {
-      return validationMessages.passwordNeedsLetter;
+      return t.auth.passwordNeedsLetter;
     }
 
     if (!/\d/.test(value)) {
-      return validationMessages.passwordNeedsNumber;
+      return t.auth.passwordNeedsNumber;
     }
 
     return "";
@@ -71,7 +46,7 @@ export default function RegisterForm() {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!validateEmail(normalizedEmail)) {
-      setErrorMessage(validationMessages.invalidEmail);
+      setErrorMessage(t.auth.invalidEmail);
       return;
     }
 
@@ -83,19 +58,22 @@ export default function RegisterForm() {
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage(validationMessages.passwordsDoNotMatch);
+      setErrorMessage(t.auth.passwordsDoNotMatch);
       return;
     }
 
     setIsSubmitting(true);
 
-   const { error } = await supabase.auth.signUp({
-     email: normalizedEmail,
-     password,
-     options: {
-       emailRedirectTo: `${window.location.origin}/login?confirmed=true`,
-     },
-   });
+    const { error } = await supabase.auth.signUp({
+      email: normalizedEmail,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/login?confirmed=true`,
+        data: {
+          language,
+        },
+      },
+    });
 
     setIsSubmitting(false);
 
@@ -104,25 +82,14 @@ export default function RegisterForm() {
         .toLowerCase()
         .includes("email rate limit");
 
-      setErrorMessage(
-        isEmailRateLimit
-          ? language === "pl"
-            ? "Wysłano zbyt wiele wiadomości e-mail. Spróbuj ponownie za godzinę."
-            : "Надіслано забагато email-листів. Спробуй ще раз приблизно за годину."
-          : error.message,
-      );
-
+      setErrorMessage(isEmailRateLimit ? t.auth.emailRateLimit : error.message);
       return;
     }
 
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-    setMessage(
-      language === "pl"
-        ? "Konto zostało utworzone. Sprawdź e-mail i potwierdź adres."
-        : "Акаунт створено. Перевір пошту й підтверди електронну адресу.",
-    );
+    setMessage(t.auth.registerSuccess);
   };
 
   const handleGoogleAuth = async () => {
@@ -132,15 +99,13 @@ export default function RegisterForm() {
       await signInWithGoogle();
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : validationMessages.googleAuthFailed,
+        error instanceof Error ? error.message : t.auth.googleAuthFailed,
       );
     }
   };
 
   return (
-    <section className="max-w-md mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <section className="mx-auto max-w-md px-4 py-12 sm:px-6 md:py-16">
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
         {t.auth.registerTitle}
       </h1>
@@ -169,7 +134,7 @@ export default function RegisterForm() {
 
         <input
           type="password"
-          placeholder={language === "pl" ? "Powtórz hasło" : "Повтори пароль"}
+          placeholder={t.auth.confirmPassword}
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.target.value)}
           required
@@ -179,9 +144,7 @@ export default function RegisterForm() {
         />
 
         <p className="text-xs text-gray-500 dark:text-zinc-400">
-          {language === "pl"
-            ? "Hasło musi mieć minimum 8 znaków, co najmniej jedną literę i jedną cyfrę."
-            : "Пароль має містити мінімум 8 символів, щонайменше одну літеру й одну цифру."}
+          {t.auth.passwordHint}
         </p>
 
         {message && (
@@ -198,7 +161,7 @@ export default function RegisterForm() {
 
         <button
           disabled={isSubmitting}
-          className="w-full rounded-full bg-black text-white dark:bg-white dark:text-black py-3 text-sm disabled:opacity-50"
+          className="w-full rounded-full bg-black py-3 text-sm text-white disabled:opacity-50 dark:bg-white dark:text-black"
         >
           {isSubmitting ? t.auth.registerLoading : t.auth.registerButton}
         </button>
@@ -206,7 +169,7 @@ export default function RegisterForm() {
 
       <p className="mt-6 text-sm text-gray-500 dark:text-zinc-400">
         {t.auth.haveAccount}{" "}
-        <Link href="/login" className="text-gray-900 dark:text-white underline">
+        <Link href="/login" className="text-gray-900 underline dark:text-white">
           {t.auth.loginLink}
         </Link>
       </p>
@@ -218,11 +181,10 @@ export default function RegisterForm() {
           mt-6
           w-full rounded-full
           border border-gray-300
-          dark:border-zinc-700
           py-3 text-sm
-          text-gray-700 dark:text-zinc-200
+          text-gray-700
           hover:bg-gray-100
-          dark:hover:bg-zinc-900
+          dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900
         "
       >
         {t.auth.googleLogin}

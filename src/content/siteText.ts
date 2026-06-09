@@ -1,5 +1,18 @@
 export const siteText = {
     pl: {
+        header: {
+            menu: "Menu",
+            close: "Zamknij",
+            login: "Logowanie",
+            register: "Rejestracja",
+            account: "Moje konto",
+            logout: "Wyloguj się",
+            language: "Język",
+            theme: "Motyw",
+            switchToLight: "Przełącz na jasny motyw",
+            switchToDark: "Przełącz na ciemny motyw",
+        },
+
         account: {
             title: "Moje konto",
 
@@ -36,7 +49,8 @@ export const siteText = {
             newEmail: "Nowy adres e-mail",
             emailSubmit: "Zmień e-mail",
             emailSubmitting: "Wysyłanie...",
-            emailSuccess: "Sprawdź nowy adres e-mail i potwierdź zmianę.",
+            emailSuccess:
+                "Wysłaliśmy wiadomości potwierdzające na obecny i nowy adres e-mail. Aby zakończyć zmianę adresu, otwórz wiadomość na nowym adresie e-mail i potwierdź zmianę.",
             emailFailed: "Nie udało się zmienić adresu e-mail.",
             emailRateLimit:
                 "Wysłano zbyt wiele wiadomości e-mail. Spróbuj ponownie później.",
@@ -65,6 +79,7 @@ export const siteText = {
             passwordNeedsNumber: "Hasło musi zawierać co najmniej jedną cyfrę.",
             passwordsDoNotMatch: "Hasła nie są takie same.",
         },
+
         orders: {
             title: "Moje zamówienia",
             empty: "Nie masz jeszcze żadnych zamówień.",
@@ -77,6 +92,7 @@ export const siteText = {
             quantity: "Ilość",
             price: "Cena",
         },
+
         orderSuccess: {
             title: "Dziękujemy za zamówienie!",
             orderNumber: "Numer zamówienia",
@@ -84,7 +100,15 @@ export const siteText = {
                 "Twoje zamówienie zostało zapisane. Wkrótce otrzymasz dalsze informacje.",
             backToShop: "Wróć do sklepu",
         },
+
         checkout: {
+            loadingProfile: "Ładowanie danych dostawy...",
+            profileLoadFailed: "Nie udało się załadować zapisanych danych.",
+            profileSaveFailed: "Nie udało się zapisać danych dostawy.",
+            requiredFields: "Uzupełnij wszystkie wymagane pola.",
+            orderCreationFailed: "Nie udało się utworzyć zamówienia.",
+            placeOrderSubmitting: "Składanie zamówienia...",
+
             goToCheckout: "Przejdź do kasy",
             title: "Zamówienie",
 
@@ -110,14 +134,17 @@ export const siteText = {
             placeOrder: "Złóż zamówienie",
             submitted: "Formularz zamówienia został wysłany.",
         },
+
         auth: {
             loginRequired: "Musisz się zalogować, aby zobaczyć profil.",
-            googleLogin: "Kontynuuj z Google",
+
             loginTitle: "Logowanie",
             registerTitle: "Rejestracja",
 
             email: "Email",
             password: "Hasło",
+            newPassword: "Nowe hasło",
+            confirmPassword: "Powtórz hasło",
 
             loginButton: "Zaloguj się",
             loginLoading: "Logowanie...",
@@ -131,12 +158,54 @@ export const siteText = {
             registerLink: "Zarejestruj się",
             loginLink: "Zaloguj się",
 
-            registrationSuccess:
-                "Konto zostało utworzone. Sprawdź email, aby potwierdzić rejestrację.",
+            googleLogin: "Kontynuuj z Google",
+            googleAuthFailed: "Logowanie przez Google nie powiodło się.",
+
+            loginEmailConfirmed:
+                "Adres e-mail został potwierdzony. Możesz się teraz zalogować.",
+            loginPasswordReset:
+                "Hasło zostało zmienione. Możesz się teraz zalogować.",
+            loginEmailNotConfirmed:
+                "Najpierw potwierdź swój adres e-mail. Sprawdź skrzynkę pocztową.",
+            forgotPasswordLink: "Nie pamiętasz hasła?",
+
+            registerSuccess:
+                "Konto zostało utworzone. Sprawdź e-mail i potwierdź adres.",
+
+            forgotPasswordTitle: "Przywracanie hasła",
+            forgotPasswordDescription:
+                "Wpisz adres e-mail, a wyślemy link do ustawienia nowego hasła.",
+            forgotPasswordSuccess:
+                "Jeśli konto istnieje, link do zmiany hasła został wysłany na e-mail.",
+            forgotPasswordSubmit: "Wyślij link",
+            forgotPasswordSubmitting: "Wysyłanie...",
+            forgotPasswordBackToLogin: "Wróć do logowania",
+
+            resetPasswordTitle: "Ustaw nowe hasło",
+            resetPasswordDescription: "Wpisz nowe hasło do swojego konta.",
+            resetPasswordSuccess:
+                "Hasło zostało zmienione. Możesz się teraz zalogować.",
+            resetPasswordFailed: "Nie udało się zmienić hasła.",
+            resetPasswordInvalidSession:
+                "Link do zmiany hasła jest nieaktywny albo wygasł. Spróbuj wysłać go ponownie.",
+            resetPasswordSubmit: "Zmień hasło",
+            resetPasswordSubmitting: "Zapisywanie...",
+            requestNewResetLink: "Wyślij nowy link",
+
+            passwordHint:
+                "Hasło musi mieć minimum 8 znaków, co najmniej jedną literę i jedną cyfrę.",
+            invalidEmail: "Wpisz poprawny adres e-mail.",
+            shortPassword: "Hasło musi mieć co najmniej 8 znaków.",
+            passwordNeedsLetter: "Hasło musi zawierać co najmniej jedną literę.",
+            passwordNeedsNumber: "Hasło musi zawierać co najmniej jedną cyfrę.",
+            passwordsDoNotMatch: "Hasła nie są takie same.",
+            emailRateLimit:
+                "Wysłano zbyt wiele wiadomości e-mail. Spróbuj ponownie za godzinę.",
 
             logout: "Wyloguj",
             profile: "Profil",
         },
+
         cart: {
             nav: "Koszyk",
             title: "Koszyk",
@@ -147,17 +216,20 @@ export const siteText = {
             total: "Razem",
             clear: "Wyczyść koszyk",
         },
+
         favorites: {
             title: "Ulubione produkty",
             empty: "Nie masz jeszcze ulubionych produktów.",
-            nav: "Ulubione"
+            nav: "Ulubione",
         },
+
         categories: {
             all: "Wszystkie",
             bags: "Torby",
             notepads: "Notesy",
             kitchen: "Kuchnia",
         },
+
         search: {
             placeholder: "Szukaj produktów...",
             title: "Wyniki wyszukiwania",
@@ -165,14 +237,17 @@ export const siteText = {
             enterQuery: "Wpisz frazę, aby znaleźć produkty.",
             empty: "Nie znaleziono produktów.",
         },
+
         demoBanner: {
             text: "🛍️ Sklep jest obecnie w fazie przygotowań do uruchomienia. To wersja demonstracyjna.",
         },
+
         nav: {
             catalog: "Katalog",
             about: "O projekcie",
             launch: "Start sklepu",
         },
+
         hero: {
             label: "SZUFLADA",
             title: "Praktyczne drobiazgi\ndo domu",
@@ -181,11 +256,13 @@ export const siteText = {
             catalogButton: "Zobacz katalog",
             aboutButton: "O projekcie",
         },
+
         catalog: {
             label: "Katalog",
             title: "Popularne produkty",
             viewAll: "Zobacz wszystkie →",
         },
+
         product: {
             addToCart: "Dodaj do koszyka",
             backToShop: "← Powrót do sklepu",
@@ -194,6 +271,7 @@ export const siteText = {
             outOfStock: "Brak w magazynie",
             stockCount: "Dostępne sztuki",
         },
+
         modal: {
             title: "Dziękujemy za zainteresowanie!",
             text1:
@@ -203,12 +281,14 @@ export const siteText = {
             support: "Wesprzyj start",
             back: "Wróć do katalogu",
         },
+
         about: {
             label: "O projekcie",
             title: "To demonstracyjna wersja przyszłego sklepu",
             description:
                 "Szuflada powstaje jako mały sklep internetowy z praktycznymi produktami do domu. Obecnie strona pomaga sprawdzić zainteresowanie pomysłem przed pierwszym zakupem towarów.",
         },
+
         support: {
             back: "← Powrót do sklepu",
             label: "Start sklepu",
@@ -231,13 +311,26 @@ export const siteText = {
             ],
             button: "Wesprzyj przez 4fund",
         },
+
         footer: {
             tagline: "Praktyczne drobiazgi do domu",
         },
-
     },
 
     uk: {
+        header: {
+            menu: "Меню",
+            close: "Закрити",
+            login: "Вхід",
+            register: "Реєстрація",
+            account: "Мій акаунт",
+            logout: "Вийти",
+            language: "Мова",
+            theme: "Тема",
+            switchToLight: "Перемкнути на світлу тему",
+            switchToDark: "Перемкнути на темну тему",
+        },
+
         account: {
             title: "Мій акаунт",
 
@@ -274,7 +367,8 @@ export const siteText = {
             newEmail: "Новий email",
             emailSubmit: "Змінити email",
             emailSubmitting: "Надсилання...",
-            emailSuccess: "Перевір нову пошту й підтверди зміну.",
+            emailSuccess:
+                "Ми надіслали листи підтвердження на поточну та нову email-адресу. Щоб завершити зміну email, відкрий лист на новій пошті та підтвердь нову адресу.",
             emailFailed: "Не вдалося змінити email.",
             emailRateLimit:
                 "Надіслано забагато email-листів. Спробуй ще раз пізніше.",
@@ -303,6 +397,7 @@ export const siteText = {
             passwordNeedsNumber: "Пароль має містити щонайменше одну цифру.",
             passwordsDoNotMatch: "Паролі не збігаються.",
         },
+
         orders: {
             title: "Мої замовлення",
             empty: "У вас ще немає замовлень.",
@@ -315,6 +410,7 @@ export const siteText = {
             quantity: "Кількість",
             price: "Ціна",
         },
+
         orderSuccess: {
             title: "Дякуємо за замовлення!",
             orderNumber: "Номер замовлення",
@@ -322,7 +418,15 @@ export const siteText = {
                 "Ваше замовлення збережено. Найближчим часом ви отримаєте подальшу інформацію.",
             backToShop: "Повернутися до магазину",
         },
+
         checkout: {
+            loadingProfile: "Завантаження даних доставки...",
+            profileLoadFailed: "Не вдалося завантажити збережені дані.",
+            profileSaveFailed: "Не вдалося зберегти дані доставки.",
+            requiredFields: "Заповни всі обовʼязкові поля.",
+            orderCreationFailed: "Не вдалося створити замовлення.",
+            placeOrderSubmitting: "Оформлення замовлення...",
+
             goToCheckout: "Перейти до оформлення",
             title: "Оформлення замовлення",
 
@@ -348,14 +452,17 @@ export const siteText = {
             placeOrder: "Оформити замовлення",
             submitted: "Форму замовлення надіслано.",
         },
+
         auth: {
             loginRequired: "Потрібно увійти, щоб переглянути профіль.",
-            googleLogin: "Продовжити з Google",
+
             loginTitle: "Вхід",
             registerTitle: "Реєстрація",
 
             email: "Email",
             password: "Пароль",
+            newPassword: "Новий пароль",
+            confirmPassword: "Повтори пароль",
 
             loginButton: "Увійти",
             loginLoading: "Вхід...",
@@ -369,12 +476,52 @@ export const siteText = {
             registerLink: "Зареєструватися",
             loginLink: "Увійти",
 
-            registrationSuccess:
-                "Акаунт створено. Перевірте електронну пошту для підтвердження реєстрації.",
+            googleLogin: "Продовжити з Google",
+            googleAuthFailed: "Не вдалося увійти через Google.",
+
+            loginEmailConfirmed:
+                "Електронну пошту підтверджено. Тепер можна увійти.",
+            loginPasswordReset: "Пароль змінено. Тепер можна увійти.",
+            loginEmailNotConfirmed:
+                "Спочатку підтверди електронну пошту. Перевір свою поштову скриньку.",
+            forgotPasswordLink: "Не памʼятаєш пароль?",
+
+            registerSuccess:
+                "Акаунт створено. Перевір пошту й підтверди електронну адресу.",
+
+            forgotPasswordTitle: "Відновлення паролю",
+            forgotPasswordDescription:
+                "Введи електронну пошту, і ми надішлемо посилання для створення нового паролю.",
+            forgotPasswordSuccess:
+                "Якщо акаунт існує, посилання для зміни паролю надіслано на пошту.",
+            forgotPasswordSubmit: "Надіслати посилання",
+            forgotPasswordSubmitting: "Надсилання...",
+            forgotPasswordBackToLogin: "Повернутись до входу",
+
+            resetPasswordTitle: "Створи новий пароль",
+            resetPasswordDescription: "Введи новий пароль для свого акаунту.",
+            resetPasswordSuccess: "Пароль змінено. Тепер можна увійти.",
+            resetPasswordFailed: "Не вдалося змінити пароль.",
+            resetPasswordInvalidSession:
+                "Посилання для зміни паролю неактивне або протерміноване. Спробуй надіслати його ще раз.",
+            resetPasswordSubmit: "Змінити пароль",
+            resetPasswordSubmitting: "Збереження...",
+            requestNewResetLink: "Надіслати нове посилання",
+
+            passwordHint:
+                "Пароль має містити мінімум 8 символів, щонайменше одну літеру й одну цифру.",
+            invalidEmail: "Введи коректну електронну пошту.",
+            shortPassword: "Пароль має містити щонайменше 8 символів.",
+            passwordNeedsLetter: "Пароль має містити щонайменше одну літеру.",
+            passwordNeedsNumber: "Пароль має містити щонайменше одну цифру.",
+            passwordsDoNotMatch: "Паролі не збігаються.",
+            emailRateLimit:
+                "Надіслано забагато email-листів. Спробуй ще раз приблизно за годину.",
 
             logout: "Вийти",
             profile: "Профіль",
         },
+
         cart: {
             nav: "Кошик",
             title: "Кошик",
@@ -385,17 +532,20 @@ export const siteText = {
             total: "Разом",
             clear: "Очистити кошик",
         },
+
         favorites: {
             title: "Улюблені товари",
             empty: "У тебе ще немає улюблених товарів.",
             nav: "Улюблені",
         },
+
         categories: {
             all: "Всі",
             bags: "Сумки",
             notepads: "Блокноти",
             kitchen: "Кухня",
         },
+
         search: {
             placeholder: "Пошук товарів...",
             title: "Результати пошуку",
@@ -403,14 +553,17 @@ export const siteText = {
             enterQuery: "Введіть запит, щоб знайти товари.",
             empty: "Товарів не знайдено.",
         },
+
         demoBanner: {
             text: "🛍️ Магазин перебуває на етапі підготовки до запуску. Це демонстраційна версія.",
         },
+
         nav: {
             catalog: "Каталог",
             about: "Про проєкт",
             launch: "Запуск магазину",
         },
+
         hero: {
             label: "SZUFLADA",
             title: "Практичні дрібниці\nдля дому",
@@ -419,11 +572,13 @@ export const siteText = {
             catalogButton: "Переглянути каталог",
             aboutButton: "Про проєкт",
         },
+
         catalog: {
             label: "Каталог",
             title: "Популярні товари",
             viewAll: "Переглянути всі →",
         },
+
         product: {
             addToCart: "Додати в кошик",
             backToShop: "← Назад до магазину",
@@ -432,6 +587,7 @@ export const siteText = {
             outOfStock: "Немає в наявності",
             stockCount: "Доступно",
         },
+
         modal: {
             title: "Дякуємо за інтерес!",
             text1:
@@ -441,12 +597,14 @@ export const siteText = {
             support: "Підтримати запуск",
             back: "Повернутися до каталогу",
         },
+
         about: {
             label: "Про проєкт",
             title: "Це демо-версія майбутнього магазину",
             description:
                 "Szuflada створюється як невеликий інтернет-магазин з практичними товарами для дому. Зараз сайт допомагає перевірити інтерес до ідеї перед запуском першої партії товарів.",
         },
+
         support: {
             back: "← Повернутися до магазину",
             label: "Запуск магазину",
@@ -469,6 +627,7 @@ export const siteText = {
             ],
             button: "Підтримати через 4fund",
         },
+
         footer: {
             tagline: "Практичні дрібниці для дому",
         },

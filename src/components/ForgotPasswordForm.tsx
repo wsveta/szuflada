@@ -6,36 +6,12 @@ import { supabase } from "@/lib/supabase";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function ForgotPasswordForm() {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
 
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const text = {
-    title: language === "pl" ? "Przywracanie hasła" : "Відновлення паролю",
-    description:
-      language === "pl"
-        ? "Wpisz adres e-mail, a wyślemy link do ustawienia nowego hasła."
-        : "Введи електронну пошту, і ми надішлемо посилання для створення нового паролю.",
-    success:
-      language === "pl"
-        ? "Jeśli konto istnieje, link do zmiany hasła został wysłany na e-mail."
-        : "Якщо акаунт існує, посилання для зміни паролю надіслано на пошту.",
-    invalidEmail:
-      language === "pl"
-        ? "Wpisz poprawny adres e-mail."
-        : "Введи коректну електронну пошту.",
-    rateLimit:
-      language === "pl"
-        ? "Wysłano zbyt wiele wiadomości e-mail. Spróbuj ponownie później."
-        : "Надіслано забагато email-листів. Спробуй ще раз пізніше.",
-    submit: language === "pl" ? "Wyślij link" : "Надіслати посилання",
-    submitting: language === "pl" ? "Wysyłanie..." : "Надсилання...",
-    backToLogin:
-      language === "pl" ? "Wróć do logowania" : "Повернутись до входу",
-  };
 
   const validateEmail = (value: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -50,7 +26,7 @@ export default function ForgotPasswordForm() {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!validateEmail(normalizedEmail)) {
-      setErrorMessage(text.invalidEmail);
+      setErrorMessage(t.auth.invalidEmail);
       return;
     }
 
@@ -70,22 +46,22 @@ export default function ForgotPasswordForm() {
         .toLowerCase()
         .includes("email rate limit");
 
-      setErrorMessage(isRateLimit ? text.rateLimit : error.message);
+      setErrorMessage(isRateLimit ? t.auth.emailRateLimit : error.message);
       return;
     }
 
     setEmail("");
-    setMessage(text.success);
+    setMessage(t.auth.forgotPasswordSuccess);
   };
 
   return (
-    <section className="max-w-md mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <section className="mx-auto max-w-md px-4 py-12 sm:px-6 md:py-16">
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-        {text.title}
+        {t.auth.forgotPasswordTitle}
       </h1>
 
       <p className="mt-4 text-sm text-gray-500 dark:text-zinc-400">
-        {text.description}
+        {t.auth.forgotPasswordDescription}
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-4">
@@ -113,9 +89,11 @@ export default function ForgotPasswordForm() {
 
         <button
           disabled={isSubmitting}
-          className="w-full rounded-full bg-black text-white dark:bg-white dark:text-black py-3 text-sm disabled:opacity-50"
+          className="w-full rounded-full bg-black py-3 text-sm text-white disabled:opacity-50 dark:bg-white dark:text-black"
         >
-          {isSubmitting ? text.submitting : text.submit}
+          {isSubmitting
+            ? t.auth.forgotPasswordSubmitting
+            : t.auth.forgotPasswordSubmit}
         </button>
       </form>
 
@@ -123,7 +101,7 @@ export default function ForgotPasswordForm() {
         href="/login"
         className="mt-6 inline-block text-sm text-gray-500 underline hover:text-black dark:text-zinc-400 dark:hover:text-white"
       >
-        {text.backToLogin}
+        {t.auth.forgotPasswordBackToLogin}
       </Link>
     </section>
   );

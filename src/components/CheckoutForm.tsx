@@ -43,29 +43,6 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
     paymentMethod: "bank_transfer",
   });
 
-  const text = {
-    loadingProfile:
-      language === "pl"
-        ? "Ładowanie danych dostawy..."
-        : "Завантаження даних доставки...",
-    profileLoadFailed:
-      language === "pl"
-        ? "Nie udało się załadować zapisanych danych."
-        : "Не вдалося завантажити збережені дані.",
-    profileSaveFailed:
-      language === "pl"
-        ? "Nie udało się zapisać danych dostawy."
-        : "Не вдалося зберегти дані доставки.",
-    requiredFields:
-      language === "pl"
-        ? "Uzupełnij wszystkie wymagane pola."
-        : "Заповни всі обовʼязкові поля.",
-    orderCreationFailed:
-      language === "pl"
-        ? "Nie udało się utworzyć zamówienia."
-        : "Не вдалося створити замовлення.",
-  };
-
   const inputClassName = `
     w-full rounded-full border border-gray-300
     bg-white px-4 py-3 text-sm text-gray-900
@@ -121,7 +98,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
         }
 
         setErrorMessage(
-          error instanceof Error ? error.message : text.profileLoadFailed,
+          error instanceof Error ? error.message : t.checkout.profileLoadFailed,
         );
       } finally {
         if (isMounted) {
@@ -135,7 +112,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
     return () => {
       isMounted = false;
     };
-  }, [user, text.profileLoadFailed]);
+  }, [user, t.checkout.profileLoadFailed]);
 
   const cartProducts = items
     .map((item) => {
@@ -205,7 +182,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
       !checkoutData.postalCode ||
       !checkoutData.addressLine1
     ) {
-      setErrorMessage(text.requiredFields);
+      setErrorMessage(t.checkout.requiredFields);
       return;
     }
 
@@ -231,7 +208,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
     } catch (error) {
       setIsSubmitting(false);
       setErrorMessage(
-        error instanceof Error ? error.message : text.profileSaveFailed,
+        error instanceof Error ? error.message : t.checkout.profileSaveFailed,
       );
       return;
     }
@@ -259,7 +236,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
 
     if (orderError || !order) {
       setIsSubmitting(false);
-      setErrorMessage(orderError?.message ?? text.orderCreationFailed);
+      setErrorMessage(orderError?.message ?? t.checkout.orderCreationFailed);
       return;
     }
 
@@ -295,7 +272,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
 
       {isLoadingProfile && (
         <p className="mt-4 text-sm text-gray-500 dark:text-zinc-400">
-          {text.loadingProfile}
+          {t.checkout.loadingProfile}
         </p>
       )}
 
@@ -431,7 +408,9 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
           disabled={isSubmitting}
           className="w-full rounded-full bg-black py-3 text-white disabled:opacity-50 dark:bg-white dark:text-black"
         >
-          {isSubmitting ? "..." : t.checkout.placeOrder}
+          {isSubmitting
+            ? t.checkout.placeOrderSubmitting
+            : t.checkout.placeOrder}
         </button>
       </form>
     </section>

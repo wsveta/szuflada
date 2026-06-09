@@ -432,15 +432,17 @@ export default function AccountContent() {
             </p>
           </div>
 
-          <div>
-            <p className="text-sm text-gray-500 dark:text-zinc-400">
-              {text.role}
-            </p>
+          {profile.role === "admin" && (
+            <div>
+              <p className="text-sm text-gray-500 dark:text-zinc-400">
+                {text.role}
+              </p>
 
-            <p className="mt-1 font-medium text-gray-900 dark:text-white">
-              {profile.role === "admin" ? text.admin : text.customer}
-            </p>
-          </div>
+              <p className="mt-1 font-medium text-gray-900 dark:text-white">
+                {text.admin}
+              </p>
+            </div>
+          )}
         </div>
 
         <button

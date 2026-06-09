@@ -9,7 +9,7 @@ import { signInWithGoogle } from "@/lib/auth";
 
 export default function LoginForm() {
   const router = useRouter();
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,47 +18,17 @@ export default function LoginForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const loginMessages = {
-    emailConfirmed:
-      language === "pl"
-        ? "Adres e-mail został potwierdzony. Możesz się teraz zalogować."
-        : "Електронну пошту підтверджено. Тепер можна увійти.",
-
-    passwordReset:
-      language === "pl"
-        ? "Hasło zostało zmienione. Możesz się teraz zalogować."
-        : "Пароль змінено. Тепер можна увійти.",
-
-    emailNotConfirmed:
-      language === "pl"
-        ? "Najpierw potwierdź swój adres e-mail. Sprawdź skrzynkę pocztową."
-        : "Спочатку підтверди електронну пошту. Перевір свою поштову скриньку.",
-
-    googleAuthFailed:
-      language === "pl"
-        ? "Logowanie przez Google nie powiodło się."
-        : "Не вдалося увійти через Google.",
-  };
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
 
     if (params.get("confirmed") === "true") {
-      setMessage(
-        language === "pl"
-          ? "Adres e-mail został potwierdzony. Możesz się teraz zalogować."
-          : "Електронну пошту підтверджено. Тепер можна увійти.",
-      );
+      setMessage(t.auth.loginEmailConfirmed);
     }
 
     if (params.get("passwordReset") === "true") {
-      setMessage(
-        language === "pl"
-          ? "Hasło zostało zmienione. Możesz się teraz zalogować."
-          : "Пароль змінено. Тепер можна увійти.",
-      );
+      setMessage(t.auth.loginPasswordReset);
     }
-  }, [language]);
+  }, [t.auth.loginEmailConfirmed, t.auth.loginPasswordReset]);
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -82,7 +52,7 @@ export default function LoginForm() {
         .includes("email not confirmed");
 
       setErrorMessage(
-        isEmailNotConfirmed ? loginMessages.emailNotConfirmed : error.message,
+        isEmailNotConfirmed ? t.auth.loginEmailNotConfirmed : error.message,
       );
 
       return;
@@ -99,13 +69,13 @@ export default function LoginForm() {
       await signInWithGoogle();
     } catch (error) {
       setErrorMessage(
-        error instanceof Error ? error.message : loginMessages.googleAuthFailed,
+        error instanceof Error ? error.message : t.auth.googleAuthFailed,
       );
     }
   };
 
   return (
-    <section className="max-w-md mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <section className="mx-auto max-w-md px-4 py-12 sm:px-6 md:py-16">
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
         {t.auth.loginTitle}
       </h1>
@@ -145,7 +115,7 @@ export default function LoginForm() {
 
         <button
           disabled={isSubmitting}
-          className="w-full rounded-full bg-black text-white dark:bg-white dark:text-black py-3 text-sm disabled:opacity-50"
+          className="w-full rounded-full bg-black py-3 text-sm text-white disabled:opacity-50 dark:bg-white dark:text-black"
         >
           {isSubmitting ? t.auth.loginLoading : t.auth.loginButton}
         </button>
@@ -156,7 +126,7 @@ export default function LoginForm() {
           {t.auth.noAccount}{" "}
           <Link
             href="/register"
-            className="text-gray-900 dark:text-white underline"
+            className="text-gray-900 underline dark:text-white"
           >
             {t.auth.registerLink}
           </Link>
@@ -166,7 +136,7 @@ export default function LoginForm() {
           href="/forgot-password"
           className="inline-block text-sm text-gray-500 underline hover:text-black dark:text-zinc-400 dark:hover:text-white"
         >
-          {language === "pl" ? "Nie pamiętasz hasła?" : "Не памʼятаєш пароль?"}
+          {t.auth.forgotPasswordLink}
         </Link>
       </div>
 
@@ -177,11 +147,10 @@ export default function LoginForm() {
           mt-6
           w-full rounded-full
           border border-gray-300
-          dark:border-zinc-700
           py-3 text-sm
-          text-gray-700 dark:text-zinc-200
+          text-gray-700
           hover:bg-gray-100
-          dark:hover:bg-zinc-900
+          dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-900
         "
       >
         {t.auth.googleLogin}

@@ -83,25 +83,6 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const text = {
-    menu: language === "pl" ? "Menu" : "Меню",
-    close: language === "pl" ? "Zamknij" : "Закрити",
-    login: language === "pl" ? "Logowanie" : "Вхід",
-    register: language === "pl" ? "Rejestracja" : "Реєстрація",
-    account: language === "pl" ? "Moje konto" : "Мій акаунт",
-    logout: language === "pl" ? "Wyloguj się" : "Вийти",
-    language: language === "pl" ? "Język" : "Мова",
-    theme: language === "pl" ? "Motyw" : "Тема",
-    switchToLight:
-      language === "pl"
-        ? "Przełącz na jasny motyw"
-        : "Перемкнути на світлу тему",
-    switchToDark:
-      language === "pl"
-        ? "Przełącz na ciemny motyw"
-        : "Перемкнути на темну тему",
-  };
-
   const nextLanguage = language === "pl" ? "uk" : "pl";
   const nextLanguageLabel = language === "pl" ? "UA" : "PL";
   const isDarkTheme = theme === "dark";
@@ -240,7 +221,7 @@ export default function Header() {
               dark:border-zinc-700 dark:text-zinc-200
               dark:hover:bg-zinc-900 dark:hover:text-white
             "
-            aria-label={text.language}
+            aria-label={t.header.language}
           >
             {nextLanguageLabel}
           </button>
@@ -255,7 +236,9 @@ export default function Header() {
               dark:border-zinc-700 dark:text-zinc-200
               dark:hover:bg-zinc-900 dark:hover:text-white
             "
-            aria-label={isDarkTheme ? text.switchToLight : text.switchToDark}
+            aria-label={
+              isDarkTheme ? t.header.switchToLight : t.header.switchToDark
+            }
           >
             {isDarkTheme ? <SunIcon /> : <MoonIcon />}
           </button>
@@ -271,8 +254,8 @@ export default function Header() {
                   dark:border-zinc-700 dark:text-zinc-200
                   dark:hover:bg-zinc-900 dark:hover:text-white
                 "
-                aria-label={text.account}
-                title={text.account}
+                aria-label={t.header.account}
+                title={t.header.account}
               >
                 <PortraitIcon />
               </Link>
@@ -282,7 +265,7 @@ export default function Header() {
                 onClick={handleLogout}
                 className="text-sm text-gray-500 underline hover:text-black dark:text-zinc-400 dark:hover:text-white"
               >
-                {text.logout}
+                {t.header.logout}
               </button>
             </div>
           ) : (
@@ -291,7 +274,7 @@ export default function Header() {
                 href="/login"
                 className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
               >
-                {text.login}
+                {t.header.login}
               </Link>
 
               <Link
@@ -302,7 +285,7 @@ export default function Header() {
                   dark:bg-white dark:text-black dark:hover:bg-zinc-200
                 "
               >
-                {text.register}
+                {t.header.register}
               </Link>
             </div>
           )}
@@ -311,8 +294,8 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setIsMenuOpen((value) => !value)}
-          className="lg:hidden text-gray-900 dark:text-white"
-          aria-label={isMenuOpen ? text.close : text.menu}
+          className="text-gray-900 dark:text-white lg:hidden"
+          aria-label={isMenuOpen ? t.header.close : t.header.menu}
         >
           {isMenuOpen ? "×" : "☰"}
         </button>
@@ -395,7 +378,7 @@ export default function Header() {
                     >
                       <PortraitIcon />
                     </span>
-                    {text.account}
+                    {t.header.account}
                   </Link>
 
                   <button
@@ -403,7 +386,7 @@ export default function Header() {
                     onClick={handleLogout}
                     className="text-left text-gray-700 dark:text-zinc-200"
                   >
-                    {text.logout}
+                    {t.header.logout}
                   </button>
                 </div>
               ) : (
@@ -413,7 +396,7 @@ export default function Header() {
                     onClick={() => setIsMenuOpen(false)}
                     className="text-gray-700 dark:text-zinc-200"
                   >
-                    {text.login}
+                    {t.header.login}
                   </Link>
 
                   <Link
@@ -421,7 +404,7 @@ export default function Header() {
                     onClick={() => setIsMenuOpen(false)}
                     className="text-gray-700 dark:text-zinc-200"
                   >
-                    {text.register}
+                    {t.header.register}
                   </Link>
                 </div>
               )}
@@ -429,7 +412,7 @@ export default function Header() {
 
             <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-zinc-800">
               <span className="text-sm text-gray-500 dark:text-zinc-400">
-                {text.language}
+                {t.header.language}
               </span>
 
               <button
@@ -447,7 +430,7 @@ export default function Header() {
 
             <div className="flex items-center justify-between border-t border-gray-200 pt-4 dark:border-zinc-800">
               <span className="text-sm text-gray-500 dark:text-zinc-400">
-                {text.theme}
+                {t.header.theme}
               </span>
 
               <button
@@ -460,7 +443,7 @@ export default function Header() {
                   dark:border-zinc-700 dark:text-zinc-200
                 "
                 aria-label={
-                  isDarkTheme ? text.switchToLight : text.switchToDark
+                  isDarkTheme ? t.header.switchToLight : t.header.switchToDark
                 }
               >
                 {isDarkTheme ? <SunIcon /> : <MoonIcon />}
