@@ -6,18 +6,19 @@ import { useEffect } from "react";
 type ToastProps = {
   type: "success" | "error";
   title: string;
+  duration?: number;
   children?: ReactNode;
   onClose: () => void;
 };
 
-export default function Toast({ type, title, children, onClose }: ToastProps) {
+export default function Toast({ type, title, duration = 5000, children, onClose }: ToastProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 5000);
+    }, duration);
 
     return () => clearTimeout(timer);
-  }, [onClose]);
+  }, [duration, onClose]);
 
   return (
     <div

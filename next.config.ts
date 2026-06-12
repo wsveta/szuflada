@@ -7,10 +7,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "mywyuwdtsribhouvdkiv.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 };
 
 export default nextConfig;
-
-//додати валідацію полів, 

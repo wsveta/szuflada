@@ -5,6 +5,14 @@ import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
+import { Manrope } from "next/font/google";
+
+const siteFont = Manrope({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-site",
+  display: "swap",
+  weight: "400",
+});
 
 export const metadata: Metadata = {
   title: "Szuflada",
@@ -17,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pl" suppressHydrationWarning>
+    <html lang="pl" className={siteFont.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider>
           <LanguageProvider>

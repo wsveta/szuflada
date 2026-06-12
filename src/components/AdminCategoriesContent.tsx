@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   categoryNameExists,
   createCategory,
@@ -21,10 +21,18 @@ type ToastState = {
   title: string;
 };
 
+const CATEGORIES_PER_PAGE = 9;
+
+const sortCategoriesByNewest = (categories: Category[]) => {
+  return [...categories].sort((a, b) => b.id - a.id);
+};
+
 export default function AdminCategoriesContent({
   categories,
 }: AdminCategoriesContentProps) {
-  const [items, setItems] = useState(categories);
+  const [items, setItems] = useState(() => sortCategoriesByNewest(categories));
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [newCategory, setNewCategory] = useState({
     name_pl: "",
     name_uk: "",
@@ -32,11 +40,32 @@ export default function AdminCategoriesContent({
 
   const [toast, setToast] = useState<ToastState | null>(null);
 
+  const totalPages = Math.max(1, Math.ceil(items.length / CATEGORIES_PER_PAGE));
+
+  const firstCategoryIndex = (currentPage - 1) * CATEGORIES_PER_PAGE;
+  const visibleItems = items.slice(
+    firstCategoryIndex,
+    firstCategoryIndex + CATEGORIES_PER_PAGE
+  );
+
+  const firstVisibleCategory = items.length > 0 ? firstCategoryIndex + 1 : 0;
+
+  const lastVisibleCategory = Math.min(
+    currentPage * CATEGORIES_PER_PAGE,
+    items.length
+  );
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   const showToast = (title: string, type: "success" | "error") => {
     setToast({ title, type });
   };
 
-  const handleCreate = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const namePl = newCategory.name_pl.trim();
@@ -53,7 +82,7 @@ export default function AdminCategoriesContent({
       if (exists) {
         showToast(
           "Category with this Polish or Ukrainian name already exists.",
-          "error",
+          "error"
         );
         return;
       }
@@ -68,7 +97,11 @@ export default function AdminCategoriesContent({
 
       const createdCategory = await createCategory(categoryToCreate);
 
-      setItems((current) => [...current, createdCategory]);
+      setItems((current) =>
+        sortCategoriesByNewest([createdCategory, ...current])
+      );
+
+      setCurrentPage(1);
 
       setNewCategory({
         name_pl: "",
@@ -77,12 +110,12 @@ export default function AdminCategoriesContent({
 
       showToast(
         `Category "${categoryToCreate.name_pl}" created successfully.`,
-        "success",
+        "success"
       );
     } catch (error) {
       showToast(
         error instanceof Error ? error.message : "Category creation failed.",
-        "error",
+        "error"
       );
     }
   };
@@ -90,7 +123,7 @@ export default function AdminCategoriesContent({
   const handleEditChange = (
     categoryId: number,
     field: "name_pl" | "name_uk",
-    value: string,
+    value: string
   ) => {
     setItems((current) =>
       current.map((category) =>
@@ -99,14 +132,14 @@ export default function AdminCategoriesContent({
               ...category,
               [field]: value,
             }
-          : category,
-      ),
+          : category
+      )
     );
   };
 
   const handleUpdate = async (
-    event: React.FormEvent<HTMLFormElement>,
-    category: Category,
+    event: FormEvent<HTMLFormElement>,
+    category: Category
   ) => {
     event.preventDefault();
 
@@ -124,7 +157,7 @@ export default function AdminCategoriesContent({
       if (exists) {
         showToast(
           "Another category with this Polish or Ukrainian name already exists.",
-          "error",
+          "error"
         );
         return;
       }
@@ -143,18 +176,18 @@ export default function AdminCategoriesContent({
 
       setItems((current) =>
         current.map((item) =>
-          item.id === category.id ? updatedCategory : item,
-        ),
+          item.id === category.id ? updatedCategory : item
+        )
       );
 
       showToast(
         `Category "${updatedCategory.name_pl}" updated successfully.`,
-        "success",
+        "success"
       );
     } catch (error) {
       showToast(
         error instanceof Error ? error.message : "Category update failed.",
-        "error",
+        "error"
       );
     }
   };
@@ -175,13 +208,13 @@ export default function AdminCategoriesContent({
           `Cannot delete "${categoryToDelete.name_pl}". This category is used by ${productCount} product${
             productCount === 1 ? "" : "s"
           }.`,
-          "error",
+          "error"
         );
         return;
       }
 
       const confirmed = window.confirm(
-        `Delete category "${categoryToDelete.name_pl}"?`,
+        `Delete category "${categoryToDelete.name_pl}"?`
       );
 
       if (!confirmed) return;
@@ -192,33 +225,42 @@ export default function AdminCategoriesContent({
 
       showToast(
         `Category "${categoryToDelete.name_pl}" deleted successfully.`,
-        "success",
+        "success"
       );
     } catch (error) {
       showToast(
         error instanceof Error ? error.message : "Category deletion failed.",
-        "error",
+        "error"
       );
     }
   };
 
   return (
-    <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+    <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 md:py-16">
       {toast && (
         <Toast
           type={toast.type}
           title={toast.title}
+          duration={2000}
           onClose={() => setToast(null)}
         />
       )}
 
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-        Categories
-      </h1>
+      <div>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">
+          Categories
+        </h1>
+
+        <p className="mt-3 text-sm text-gray-500 dark:text-zinc-400">
+          {items.length > 0
+            ? `Showing ${firstVisibleCategory}–${lastVisibleCategory} of ${items.length}`
+            : "No categories found."}
+        </p>
+      </div>
 
       <form
         onSubmit={handleCreate}
-        className="mt-8 rounded-3xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-5 space-y-4"
+        className="mt-8 space-y-4 rounded-3xl border border-gray-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900"
       >
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           Create category
@@ -234,7 +276,7 @@ export default function AdminCategoriesContent({
             }))
           }
           required
-          className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+          className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
         />
 
         <input
@@ -247,59 +289,129 @@ export default function AdminCategoriesContent({
             }))
           }
           required
-          className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
+          className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
         />
 
-        <button className="rounded-full bg-black text-white dark:bg-white dark:text-black px-6 py-3 text-sm">
+        <button
+          type="submit"
+          className="rounded-full bg-black px-6 py-3 text-sm text-white dark:bg-white dark:text-black"
+        >
           Create category
         </button>
       </form>
 
-      <div className="mt-8 space-y-4">
-        {items.map((category) => (
-          <form
-            key={category.id}
-            onSubmit={(event) => handleUpdate(event, category)}
-            className="rounded-3xl border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 p-5 space-y-3"
-          >
-            <p className="text-xs text-gray-500 dark:text-zinc-400">
-              Slug: {category.slug}
-            </p>
+      {items.length === 0 ? (
+        <p className="mt-8 text-gray-500 dark:text-zinc-400">
+          No categories found.
+        </p>
+      ) : (
+        <>
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+            {visibleItems.map((category) => (
+              <form
+                key={category.id}
+                onSubmit={(event) => handleUpdate(event, category)}
+                className="space-y-3 rounded-3xl border border-gray-200 bg-white p-5 dark:border-zinc-700 dark:bg-zinc-900"
+              >
+                <p className="break-all text-xs text-gray-500 dark:text-zinc-400">
+                  Slug: {category.slug}
+                </p>
 
-            <input
-              value={category.name_pl}
-              onChange={(event) =>
-                handleEditChange(category.id, "name_pl", event.target.value)
-              }
-              required
-              className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
-            />
+                <input
+                  value={category.name_pl}
+                  onChange={(event) =>
+                    handleEditChange(category.id, "name_pl", event.target.value)
+                  }
+                  required
+                  className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                />
 
-            <input
-              value={category.name_uk}
-              onChange={(event) =>
-                handleEditChange(category.id, "name_uk", event.target.value)
-              }
-              required
-              className="w-full rounded-full border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-4 py-3 text-sm text-gray-900 dark:text-white"
-            />
+                <input
+                  value={category.name_uk}
+                  onChange={(event) =>
+                    handleEditChange(category.id, "name_uk", event.target.value)
+                  }
+                  required
+                  className="w-full rounded-full border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                />
 
-            <div className="flex gap-3">
-              <button className="rounded-full bg-black text-white dark:bg-white dark:text-black px-4 py-2 text-sm">
-                Save
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    type="submit"
+                    className="rounded-full bg-black px-4 py-2 text-sm text-white dark:bg-white dark:text-black"
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(category.id)}
+                    className="rounded-full bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </form>
+            ))}
+          </div>
+
+          {totalPages > 1 && (
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={currentPage === 1}
+                className="
+                  rounded-full border border-gray-300 px-4 py-2 text-sm
+                  text-gray-700 transition-colors
+                  hover:bg-gray-100
+                  disabled:cursor-not-allowed disabled:opacity-40
+                  dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900
+                "
+              >
+                ←
               </button>
+
+              {Array.from({ length: totalPages }).map((_, index) => {
+                const page = index + 1;
+                const isActive = page === currentPage;
+
+                return (
+                  <button
+                    key={page}
+                    type="button"
+                    onClick={() => setCurrentPage(page)}
+                    className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                      isActive
+                        ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                        : "border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
 
               <button
                 type="button"
-                onClick={() => handleDelete(category.id)}
-                className="rounded-full bg-red-600 text-white px-4 py-2 text-sm hover:bg-red-700"
+                onClick={() =>
+                  setCurrentPage((page) => Math.min(totalPages, page + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="
+                  rounded-full border border-gray-300 px-4 py-2 text-sm
+                  text-gray-700 transition-colors
+                  hover:bg-gray-100
+                  disabled:cursor-not-allowed disabled:opacity-40
+                  dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900
+                "
               >
-                Delete
+                →
               </button>
             </div>
-          </form>
-        ))}
-      </div>
+          )}
+        </>
+      )}
     </section>
   );
 }

@@ -44,17 +44,35 @@ function mapProductRowToProduct(product: ProductRow): Product {
     };
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .eq("is_available", true)
+        .eq("is_featured", true)
+        .order("featured_order", { ascending: true })
+        .limit(limit);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return (data as ProductRow[]).map(mapProductRowToProduct);
+}
+
+export async function getProducts(limit = 24): Promise<Product[]> {
     const { data, error } = await supabase
         .from("products")
         .select("*")
         .order("is_available", { ascending: false })
         .order("stock", { ascending: false })
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: true })
+        .limit(limit);
 
     if (error) {
         throw new Error(error.message);
     }
+
     return (data as ProductRow[]).map(mapProductRowToProduct);
 }
 
@@ -72,16 +90,43 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     return mapProductRowToProduct(data as ProductRow);
 }
 
+export async function getAdminProducts(): Promise<Product[]> {
+    const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .order("name_pl", { ascending: true });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return (data as ProductRow[]).map(mapProductRowToProduct);
+}
+
 export async function searchProducts({
     query,
     category,
+    page = 1,
+    limit = 24,
 }: {
     query?: string;
     category?: string;
-}): Promise<Product[]> {
+    page?: number;
+    limit?: number;
+}): Promise<{
+    products: Product[];
+    totalCount: number;
+    totalPages: number;
+}> {
     const normalizedQuery = query?.trim() ?? "";
 
-    let request = supabase.from("products").select("*");
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+
+    let request = supabase
+        .from("products")
+        .select("*", { count: "exact" });
 
     if (normalizedQuery) {
         request = request.or(
@@ -93,16 +138,24 @@ export async function searchProducts({
         request = request.eq("category", category);
     }
 
-    const { data, error } = await request
+    const { data, error, count } = await request
         .order("is_available", { ascending: false })
         .order("stock", { ascending: false })
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: true })
+        .range(from, to);
 
     if (error) {
         throw new Error(error.message);
     }
 
-    return (data as ProductRow[]).map(mapProductRowToProduct);
+    const totalCount = count ?? 0;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+        products: (data as ProductRow[]).map(mapProductRowToProduct),
+        totalCount,
+        totalPages,
+    };
 }
 
 export async function updateProductStock(

@@ -102,17 +102,40 @@ export async function getOrderById(
     };
 }
 
-export async function getAllOrders(): Promise<Order[]> {
-    const { data, error } = await supabase
+export async function getAllOrders({
+    page = 1,
+    limit = 10,
+}: {
+    page?: number;
+    limit?: number;
+} = {}): Promise<{
+    orders: Order[];
+    totalCount: number;
+    totalPages: number;
+}> {
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+
+    const { data, error, count } = await supabase
         .from("orders")
-        .select("id, order_code, status, total_amount, created_at")
-        .order("created_at", { ascending: false });
+        .select("id, order_code, status, total_amount, created_at", {
+            count: "exact",
+        })
+        .order("created_at", { ascending: false })
+        .range(from, to);
 
     if (error) {
         throw new Error(error.message);
     }
 
-    return data as Order[];
+    const totalCount = count ?? 0;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    return {
+        orders: data as Order[],
+        totalCount,
+        totalPages,
+    };
 }
 
 export async function updateOrderStatus(

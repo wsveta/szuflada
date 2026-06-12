@@ -429,7 +429,7 @@ export default function AdminProductDetailsContent({
                       />
                     </div>
 
-                    <p className="mt-3 truncate text-xs text-gray-500 dark:text-zinc-400">
+                    <p className="mt-3 break-all text-xs text-gray-500 dark:text-zinc-400">
                       {imageUrl}
                     </p>
 

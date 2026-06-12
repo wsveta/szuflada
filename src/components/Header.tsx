@@ -168,13 +168,12 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-6 lg:flex">
-          <button
-            type="button"
-            onClick={() => scrollToSection("catalog")}
-            className="text-gray-600 hover:text-black dark:text-zinc-300 dark:hover:text-white"
+          <Link
+            href="/search"
+            className="px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-black  dark:text-zinc-200 dark:hover:bg-zinc-900 dark:hover:text-white"
           >
             {t.nav.catalog}
-          </button>
+          </Link>
 
           <button
             type="button"
@@ -321,13 +320,12 @@ export default function Header() {
               />
             </form>
 
-            <button
-              type="button"
-              onClick={() => scrollToSection("catalog")}
+            <Link
+            href="/search"
               className="text-left text-gray-700 dark:text-zinc-200"
             >
               {t.nav.catalog}
-            </button>
+            </Link>
 
             <button
               type="button"

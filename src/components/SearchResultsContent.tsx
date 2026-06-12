@@ -13,6 +13,9 @@ type SearchResultsContentProps = {
   selectedCategory: string;
   products: Product[];
   categories: Category[];
+  currentPage: number;
+  totalCount: number;
+  totalPages: number;
 };
 
 export default function SearchResultsContent({
@@ -20,6 +23,9 @@ export default function SearchResultsContent({
   selectedCategory,
   products,
   categories,
+  currentPage,
+  totalCount,
+  totalPages,
 }: SearchResultsContentProps) {
   const { language, t } = useLanguage();
   const router = useRouter();
@@ -31,6 +37,10 @@ export default function SearchResultsContent({
   }, [query]);
 
   useEffect(() => {
+    if (searchValue === query) {
+      return;
+    }
+
     const timer = setTimeout(() => {
       const params = new URLSearchParams();
 
@@ -48,7 +58,7 @@ export default function SearchResultsContent({
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [searchValue, selectedCategory, router]);
+  }, [searchValue, query, selectedCategory, router]);
 
   const categoryFilters = [
     { id: "all", label: t.categories.all },
@@ -73,6 +83,29 @@ export default function SearchResultsContent({
 
     return queryString ? `/search?${queryString}` : "/search";
   };
+
+  const getPageHref = (page: number) => {
+    const params = new URLSearchParams();
+
+    if (searchValue.trim()) {
+      params.set("q", searchValue.trim());
+    }
+
+    if (selectedCategory !== "all") {
+      params.set("category", selectedCategory);
+    }
+
+    if (page > 1) {
+      params.set("page", String(page));
+    }
+
+    const queryString = params.toString();
+
+    return queryString ? `/search?${queryString}` : "/search";
+  };
+
+  const resultsLabel =
+    language === "pl" ? `Znaleziono: ${totalCount}` : `Знайдено: ${totalCount}`;
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
@@ -118,21 +151,68 @@ export default function SearchResultsContent({
       </div>
 
       {products.length > 0 && (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-          {products.map((product, index) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              isAboveTheFold={index < 4}
-            />
-          ))}
-        </div>
+        <>
+          <p className="mt-8 text-sm text-gray-500 dark:text-zinc-400">
+            {resultsLabel}
+          </p>
+
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-6">
+            {products.map((product, index) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                isAboveTheFold={index < 4}
+              />
+            ))}
+          </div>
+        </>
       )}
 
       {products.length === 0 && (
         <p className="mt-10 text-gray-500 dark:text-zinc-400">
           {t.search.empty}
         </p>
+      )}
+
+      {totalPages > 1 && (
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+          {currentPage > 1 && (
+            <Link
+              href={getPageHref(currentPage - 1)}
+              className="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
+            >
+              ←
+            </Link>
+          )}
+
+          {Array.from({ length: totalPages }).map((_, index) => {
+            const page = index + 1;
+            const isActive = page === currentPage;
+
+            return (
+              <Link
+                key={page}
+                href={getPageHref(page)}
+                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                  isActive
+                    ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black"
+                    : "border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
+                }`}
+              >
+                {page}
+              </Link>
+            );
+          })}
+
+          {currentPage < totalPages && (
+            <Link
+              href={getPageHref(currentPage + 1)}
+              className="rounded-full border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900"
+            >
+              →
+            </Link>
+          )}
+        </div>
       )}
     </section>
   );
